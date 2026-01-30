@@ -85,7 +85,8 @@ export default function NextPlaceScreen() {
   const hasNextPlace = !!state?.nextPlace;
 
   return (
-    <View style={styles.container}>
+    <ScreenWithBackground>
+      <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title="Следующее место" />
