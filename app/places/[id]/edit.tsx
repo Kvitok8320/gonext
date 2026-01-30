@@ -15,7 +15,7 @@ import {
   TextInput,
   Text,
 } from "react-native-paper";
-import { getPlaceById, updatePlace } from "../../db/places";
+import { getPlaceById, updatePlace } from "../../../db/places";
 
 export default function EditPlaceScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
