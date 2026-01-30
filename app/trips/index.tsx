@@ -107,5 +107,5 @@ const styles = StyleSheet.create({
   currentChip: { alignSelf: "flex-start" },
   desc: { color: "#666", marginTop: 4 },
   dates: { marginTop: 8, color: "#999" },
-  fab: { position: "absolute", right: 16, bottom: 16 },
+  fab: { position: "absolute", right: 16, bottom: 54 },
 });
