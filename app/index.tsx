@@ -1,17 +1,9 @@
-import { useState } from "react";
+import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import {
-  Appbar,
-  Button,
-  Snackbar,
-  Text,
-} from "react-native-paper";
+import { Appbar, Button, Surface, Text } from "react-native-paper";
 
 export default function HomeScreen() {
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-
-  const showSnackbar = () => setSnackbarVisible(true);
-  const hideSnackbar = () => setSnackbarVisible(false);
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -19,26 +11,39 @@ export default function HomeScreen() {
         <Appbar.Content title="GoNext" />
       </Appbar.Header>
 
-      <View style={styles.content}>
-        <Text variant="titleLarge" style={styles.text}>
-          Привет, React Native Paper!
+      <Surface style={styles.content} elevation={0}>
+        <Text variant="titleMedium" style={styles.subtitle}>
+          Дневник туриста
         </Text>
-        <Button mode="contained" onPress={showSnackbar}>
-          Нажми меня
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={() => router.push("/places")}
+        >
+          Места
         </Button>
-      </View>
-
-      <Snackbar
-        visible={snackbarVisible}
-        onDismiss={hideSnackbar}
-        duration={Snackbar.DURATION_SHORT}
-        action={{
-          label: "OK",
-          onPress: hideSnackbar,
-        }}
-      >
-        Кнопка нажата
-      </Snackbar>
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={() => router.push("/trips")}
+        >
+          Поездки
+        </Button>
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={() => router.push("/next-place")}
+        >
+          Следующее место
+        </Button>
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={() => router.push("/settings")}
+        >
+          Настройки
+        </Button>
+      </Surface>
     </View>
   );
 }
@@ -49,12 +54,14 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 24,
     padding: 24,
+    paddingTop: 32,
   },
-  text: {
+  subtitle: {
+    marginBottom: 24,
     textAlign: "center",
+  },
+  button: {
+    marginBottom: 12,
   },
 });
