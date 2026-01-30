@@ -16,6 +16,7 @@ import {
   Text,
 } from "react-native-paper";
 import { getTripById, updateTrip } from "../../../db/trips";
+import { ScreenWithBackground } from "../../../components/ScreenWithBackground";
 
 export default function EditTripScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -88,20 +89,23 @@ export default function EditTripScreen() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <Appbar.Header>
-          <Appbar.BackAction onPress={() => router.back()} />
-          <Appbar.Content title="Редактирование" />
-        </Appbar.Header>
-        <View style={styles.center}>
-          <Text variant="bodyLarge">Загрузка...</Text>
+      <ScreenWithBackground>
+        <View style={styles.container}>
+          <Appbar.Header>
+            <Appbar.BackAction onPress={() => router.back()} />
+            <Appbar.Content title="Редактирование" />
+          </Appbar.Header>
+          <View style={styles.center}>
+            <Text variant="bodyLarge">Загрузка...</Text>
+          </View>
         </View>
-      </View>
+      </ScreenWithBackground>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <ScreenWithBackground>
+      <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title="Редактировать поездку" />
@@ -170,7 +174,8 @@ export default function EditTripScreen() {
           </Button>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
+      </View>
+    </ScreenWithBackground>
   );
 }
 

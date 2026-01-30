@@ -1,15 +1,13 @@
 import { useRouter } from "expo-router";
-import { ImageBackground, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Appbar, Button, Surface, Text } from "react-native-paper";
-
-const bgImage = require("../assets/backgrounds/gonext-bg.png");
+import { ScreenWithBackground } from "../components/ScreenWithBackground";
 
 export default function HomeScreen() {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
-      <ImageBackground source={bgImage} style={styles.background} resizeMode="cover">
+    <ScreenWithBackground>
       <Appbar.Header>
         <Appbar.Content title="GoNext" />
       </Appbar.Header>
@@ -47,19 +45,11 @@ export default function HomeScreen() {
           Настройки
         </Button>
       </Surface>
-      </ImageBackground>
-    </View>
+    </ScreenWithBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  background: {
-    flex: 1,
-    width: "100%",
-  },
   content: {
     flex: 1,
     padding: 24,

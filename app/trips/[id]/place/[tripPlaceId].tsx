@@ -21,6 +21,7 @@ import {
 import { getTripPlaceById, updateTripPlace } from "../../../../db/tripPlaces";
 import { ensureTripPlacePhotoDir, saveImageFromPicker } from "../../../../utils/photos";
 import type { TripPlaceWithPlace } from "../../../../types";
+import { ScreenWithBackground } from "../../../../components/ScreenWithBackground";
 
 function openOnMap(lat: number, lon: number) {
   const url = `https://www.google.com/maps?q=${lat},${lon}`;
@@ -104,17 +105,19 @@ export default function TripPlaceDetailScreen() {
 
   if (loading || !tripPlace) {
     return (
-      <View style={styles.container}>
-        <Appbar.Header>
-          <Appbar.BackAction onPress={() => router.back()} />
-          <Appbar.Content title="Место" />
-        </Appbar.Header>
-        <View style={styles.center}>
-          <Text variant="bodyLarge">
-            {loading ? "Загрузка..." : "Не найдено"}
-          </Text>
+      <ScreenWithBackground>
+        <View style={styles.container}>
+          <Appbar.Header>
+            <Appbar.BackAction onPress={() => router.back()} />
+            <Appbar.Content title="Место" />
+          </Appbar.Header>
+          <View style={styles.center}>
+            <Text variant="bodyLarge">
+              {loading ? "Загрузка..." : "Не найдено"}
+            </Text>
+          </View>
         </View>
-      </View>
+      </ScreenWithBackground>
     );
   }
 
@@ -130,7 +133,8 @@ export default function TripPlaceDetailScreen() {
       : "—";
 
   return (
-    <View style={styles.container}>
+    <ScreenWithBackground>
+      <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title={place.name} />
@@ -204,7 +208,8 @@ export default function TripPlaceDetailScreen() {
           </Button>
         )}
       </ScrollView>
-    </View>
+      </View>
+    </ScreenWithBackground>
   );
 }
 

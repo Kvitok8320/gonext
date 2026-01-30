@@ -16,6 +16,7 @@ import {
   Text,
 } from "react-native-paper";
 import { createPlace } from "../../db/places";
+import { ScreenWithBackground } from "../../components/ScreenWithBackground";
 
 export default function AddPlaceScreen() {
   const router = useRouter();
@@ -64,7 +65,8 @@ export default function AddPlaceScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScreenWithBackground>
+      <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title="Добавить место" />
@@ -144,7 +146,8 @@ export default function AddPlaceScreen() {
           </Button>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
+      </View>
+    </ScreenWithBackground>
   );
 }
 

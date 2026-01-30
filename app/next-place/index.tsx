@@ -11,6 +11,7 @@ import {
 import { getCurrentTrip } from "../../db/trips";
 import { getTripPlacesWithPlaceByTripId } from "../../db/tripPlaces";
 import type { TripPlaceWithPlace } from "../../types";
+import { ScreenWithBackground } from "../../components/ScreenWithBackground";
 
 function openOnMap(lat: number, lon: number) {
   const url = `https://www.google.com/maps?q=${lat},${lon}`;
@@ -63,15 +64,17 @@ export default function NextPlaceScreen() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <Appbar.Header>
-          <Appbar.BackAction onPress={() => router.back()} />
-          <Appbar.Content title="Следующее место" />
-        </Appbar.Header>
-        <View style={styles.center}>
-          <Text variant="bodyLarge">Загрузка...</Text>
+      <ScreenWithBackground>
+        <View style={styles.container}>
+          <Appbar.Header>
+            <Appbar.BackAction onPress={() => router.back()} />
+            <Appbar.Content title="Следующее место" />
+          </Appbar.Header>
+          <View style={styles.center}>
+            <Text variant="bodyLarge">Загрузка...</Text>
+          </View>
         </View>
-      </View>
+      </ScreenWithBackground>
     );
   }
 
@@ -206,7 +209,8 @@ export default function NextPlaceScreen() {
           </>
         )}
       </ScrollView>
-    </View>
+      </View>
+    </ScreenWithBackground>
   );
 }
 

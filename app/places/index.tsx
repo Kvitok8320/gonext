@@ -16,6 +16,7 @@ import {
 import { useRouter } from "expo-router";
 import { getAllPlaces } from "../../db/places";
 import type { Place } from "../../types";
+import { ScreenWithBackground } from "../../components/ScreenWithBackground";
 
 export default function PlacesScreen() {
   const router = useRouter();
@@ -49,7 +50,8 @@ export default function PlacesScreen() {
     : places;
 
   return (
-    <View style={styles.container}>
+    <ScreenWithBackground>
+      <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title="Места" />
@@ -95,7 +97,8 @@ export default function PlacesScreen() {
         onPress={() => router.push("/places/add")}
         label="Добавить"
       />
-    </View>
+      </View>
+    </ScreenWithBackground>
   );
 }
 

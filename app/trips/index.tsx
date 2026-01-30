@@ -13,6 +13,7 @@ import {
 } from "react-native-paper";
 import { getAllTrips } from "../../db/trips";
 import type { Trip } from "../../types";
+import { ScreenWithBackground } from "../../components/ScreenWithBackground";
 
 export default function TripsScreen() {
   const router = useRouter();
@@ -40,7 +41,8 @@ export default function TripsScreen() {
     d ? new Date(d).toLocaleDateString("ru-RU", { day: "numeric", month: "short", year: "numeric" }) : "—";
 
   return (
-    <View style={styles.container}>
+    <ScreenWithBackground>
+      <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title="Поездки" />
@@ -93,7 +95,8 @@ export default function TripsScreen() {
         onPress={() => router.push("/trips/add")}
         label="Создать поездку"
       />
-    </View>
+      </View>
+    </ScreenWithBackground>
   );
 }
 

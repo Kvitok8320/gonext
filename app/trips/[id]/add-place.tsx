@@ -11,6 +11,7 @@ import {
 import { getAllPlaces } from "../../../db/places";
 import { getTripPlacesByTripId, addTripPlace } from "../../../db/tripPlaces";
 import type { Place } from "../../../types";
+import { ScreenWithBackground } from "../../../components/ScreenWithBackground";
 
 export default function AddPlaceToTripScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -60,7 +61,8 @@ export default function AddPlaceToTripScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScreenWithBackground>
+      <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title="Добавить место" />
@@ -101,7 +103,8 @@ export default function AddPlaceToTripScreen() {
           )}
         />
       )}
-    </View>
+      </View>
+    </ScreenWithBackground>
   );
 }
 

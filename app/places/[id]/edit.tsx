@@ -16,6 +16,7 @@ import {
   Text,
 } from "react-native-paper";
 import { getPlaceById, updatePlace } from "../../../db/places";
+import { ScreenWithBackground } from "../../../components/ScreenWithBackground";
 
 export default function EditPlaceScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -89,20 +90,23 @@ export default function EditPlaceScreen() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <Appbar.Header>
-          <Appbar.BackAction onPress={() => router.back()} />
-          <Appbar.Content title="Редактирование" />
-        </Appbar.Header>
-        <View style={styles.center}>
-          <Text variant="bodyLarge">Загрузка...</Text>
+      <ScreenWithBackground>
+        <View style={styles.container}>
+          <Appbar.Header>
+            <Appbar.BackAction onPress={() => router.back()} />
+            <Appbar.Content title="Редактирование" />
+          </Appbar.Header>
+          <View style={styles.center}>
+            <Text variant="bodyLarge">Загрузка...</Text>
+          </View>
         </View>
-      </View>
+      </ScreenWithBackground>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <ScreenWithBackground>
+      <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title="Редактировать место" />
@@ -182,7 +186,8 @@ export default function EditPlaceScreen() {
           </Button>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
+      </View>
+    </ScreenWithBackground>
   );
 }
 

@@ -5,11 +5,12 @@ import { useSQLiteContext } from "expo-sqlite";
 import Constants from "expo-constants";
 import {
   Appbar,
+  Button,
   Divider,
   List,
-  Text,
 } from "react-native-paper";
 import { resetAllData } from "../../db";
+import { ScreenWithBackground } from "../../components/ScreenWithBackground";
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -26,18 +27,30 @@ export default function SettingsScreen() {
       [
         { text: "Отмена", style: "cancel" },
         {
-          text: "Удалить всё",
-          style: "destructive",
-          onPress: async () => {
-            setResetting(true);
-            try {
-              await resetAllData(db);
-              router.replace("/");
-            } catch {
-              Alert.alert("Ошибка", "Не удалось сбросить данные");
-            } finally {
-              setResetting(false);
-            }
+          text: "Продолжить",
+          onPress: () => {
+            Alert.alert(
+              "Подтверждение",
+              "Вы уверены? Все данные будут удалены безвозвратно.",
+              [
+                { text: "Отмена", style: "cancel" },
+                {
+                  text: "Да, удалить всё",
+                  style: "destructive",
+                  onPress: async () => {
+                    setResetting(true);
+                    try {
+                      await resetAllData(db);
+                      router.replace("/");
+                    } catch {
+                      Alert.alert("Ошибка", "Не удалось сбросить данные");
+                    } finally {
+                      setResetting(false);
+                    }
+                  },
+                },
+              ]
+            );
           },
         },
       ]
@@ -45,7 +58,8 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScreenWithBackground>
+      <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title="Настройки" />
@@ -70,20 +84,25 @@ export default function SettingsScreen() {
 
         <List.Section>
           <List.Subheader>Данные</List.Subheader>
-          <List.Item
-            title="Сбросить все данные"
-            description="Удалить места, поездки и фото"
-            left={(props) => <List.Icon {...props} icon="delete-forever" />}
-            onPress={handleResetData}
-            disabled={resetting}
-          />
         </List.Section>
+        <Button
+          mode="contained-tonal"
+          icon="delete-forever"
+          onPress={handleResetData}
+          disabled={resetting}
+          style={styles.resetButton}
+          textColor="#C62828"
+        >
+          Сбросить все данные
+        </Button>
       </ScrollView>
-    </View>
+      </View>
+    </ScreenWithBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
   scroll: { flex: 1 },
+  resetButton: { marginHorizontal: 16, marginBottom: 24 },
 });

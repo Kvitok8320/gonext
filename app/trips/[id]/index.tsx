@@ -31,6 +31,7 @@ import {
 } from "../../../db/tripPlaces";
 import type { Trip } from "../../../types";
 import type { TripPlaceWithPlace } from "../../../types";
+import { ScreenWithBackground } from "../../../components/ScreenWithBackground";
 
 export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -129,24 +130,27 @@ export default function TripDetailScreen() {
 
   if (loading || !trip) {
     return (
-      <View style={styles.container}>
-        <Appbar.Header>
-          <Appbar.BackAction onPress={() => router.back()} />
-          <Appbar.Content title="Поездка" />
-        </Appbar.Header>
-        <View style={styles.center}>
-          <Text variant="bodyLarge">
-            {loading ? "Загрузка..." : "Не найдено"}
-          </Text>
+      <ScreenWithBackground>
+        <View style={styles.container}>
+          <Appbar.Header>
+            <Appbar.BackAction onPress={() => router.back()} />
+            <Appbar.Content title="Поездка" />
+          </Appbar.Header>
+          <View style={styles.center}>
+            <Text variant="bodyLarge">
+              {loading ? "Загрузка..." : "Не найдено"}
+            </Text>
+          </View>
         </View>
-      </View>
+      </ScreenWithBackground>
     );
   }
 
   const visitedCount = places.filter((p) => p.visited).length;
 
   return (
-    <View style={styles.container}>
+    <ScreenWithBackground>
+      <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title={trip.title} />
@@ -258,7 +262,8 @@ export default function TripDetailScreen() {
           Добавить место
         </Button>
       </ScrollView>
-    </View>
+      </View>
+    </ScreenWithBackground>
   );
 }
 

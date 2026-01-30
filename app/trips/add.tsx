@@ -16,6 +16,7 @@ import {
   Text,
 } from "react-native-paper";
 import { createTrip } from "../../db/trips";
+import { ScreenWithBackground } from "../../components/ScreenWithBackground";
 
 export default function AddTripScreen() {
   const router = useRouter();
@@ -63,7 +64,8 @@ export default function AddTripScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScreenWithBackground>
+      <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title="Создать поездку" />
@@ -132,7 +134,8 @@ export default function AddTripScreen() {
           </Button>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
+      </View>
+    </ScreenWithBackground>
   );
 }
 
