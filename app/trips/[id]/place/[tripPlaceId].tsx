@@ -75,8 +75,7 @@ export default function TripPlaceDetailScreen() {
     }
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
-      allowsEditing: true,
-      aspect: [4, 3],
+      allowsEditing: false,
       base64: true,
     });
     if (result.canceled || !result.assets[0]) return;
