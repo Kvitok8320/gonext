@@ -14,9 +14,6 @@ import {
   Appbar,
   Button,
   Card,
-  Chip,
-  Divider,
-  IconButton,
   Text,
 } from "react-native-paper";
 import { getPlaceById, updatePlace, deletePlace } from "../../../db/places";
@@ -130,47 +127,29 @@ export default function PlaceDetailScreen() {
       </Appbar.Header>
 
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
-        <Card style={styles.card}>
-          <Card.Content>
-            <View style={styles.chips}>
-              {place.visitlater && <Chip icon="map-marker">Хочу посетить</Chip>}
-              {place.liked && <Chip icon="heart">Понравилось</Chip>}
-            </View>
+        <Card style={styles.infoCard}>
+          <Card.Content style={styles.infoContent}>
+            <Text variant="titleLarge" style={styles.placeName}>
+              {place.name}
+            </Text>
             {place.description ? (
-              <Text variant="bodyLarge" style={styles.description}>
+              <Text variant="bodyMedium" style={styles.infoRow}>
                 {place.description}
               </Text>
             ) : null}
             {hasCoords && (
-              <Text variant="bodySmall" style={styles.coords}>
-                {place.latitude?.toFixed(6)}, {place.longitude?.toFixed(6)}
+              <Text variant="bodyMedium" style={styles.infoRow}>
+                DD: {place.latitude?.toFixed(6)}, {place.longitude?.toFixed(6)}
               </Text>
             )}
+            <Text variant="bodyMedium" style={styles.infoRow}>
+              В планах: {place.visitlater ? "да" : "нет"}
+            </Text>
+            <Text variant="bodyMedium" style={styles.infoRow}>
+              Понравилось: {place.liked ? "да" : "нет"}
+            </Text>
           </Card.Content>
         </Card>
-
-        <Text variant="titleMedium" style={styles.sectionTitle}>
-          Фотографии
-        </Text>
-        <View style={styles.photosRow}>
-          {place.photos.map((path, index) => (
-            <View key={path} style={styles.photoWrapper}>
-              <Image source={{ uri: path }} style={styles.photo} />
-              <IconButton
-                icon="close"
-                size={20}
-                style={styles.photoDelete}
-                onPress={() => handleDeletePhoto(index)}
-              />
-            </View>
-          ))}
-          <View style={styles.addPhotoBtn}>
-            <IconButton icon="camera-plus" size={32} onPress={handleAddPhoto} />
-            <Text variant="labelSmall">Добавить</Text>
-          </View>
-        </View>
-
-        <Divider style={styles.divider} />
 
         {hasCoords && (
           <Button
@@ -182,6 +161,34 @@ export default function PlaceDetailScreen() {
             Открыть на карте
           </Button>
         )}
+
+        <Text variant="titleMedium" style={styles.sectionTitle}>
+          Фотографии
+        </Text>
+        <Button
+          mode="outlined"
+          icon="camera-plus"
+          onPress={handleAddPhoto}
+          style={styles.addPhotoButton}
+        >
+          Добавить фото
+        </Button>
+
+        {place.photos.map((path, index) => (
+          <View key={path} style={styles.photoBlock}>
+            <Image source={{ uri: path }} style={styles.photoImage} />
+            <Button
+              mode="contained"
+              icon="delete"
+              onPress={() => handleDeletePhoto(index)}
+              buttonColor="#E65100"
+              style={styles.deletePhotoButton}
+            >
+              Удалить фото
+            </Button>
+          </View>
+        ))}
+
         {!hasCoords && (
           <Text variant="bodySmall" style={styles.hint}>
             Добавьте координаты при редактировании, чтобы открыть место на карте.
@@ -197,17 +204,20 @@ const styles = StyleSheet.create({
   center: { flex: 1, justifyContent: "center", alignItems: "center", padding: 24 },
   scroll: { flex: 1 },
   content: { padding: 16, paddingBottom: 32 },
-  card: { marginBottom: 16 },
-  chips: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 8 },
-  description: { marginTop: 8 },
-  coords: { marginTop: 8, color: "#666" },
-  sectionTitle: { marginBottom: 8 },
-  photosRow: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  photoWrapper: { position: "relative" },
-  photo: { width: 80, height: 80, borderRadius: 8 },
-  photoDelete: { position: "absolute", top: -8, right: -8, margin: 0 },
-  addPhotoBtn: { width: 80, height: 80, justifyContent: "center", alignItems: "center", borderWidth: 1, borderStyle: "dashed", borderRadius: 8 },
-  divider: { marginVertical: 16 },
-  mapButton: { marginTop: 8 },
+  infoCard: { marginBottom: 16 },
+  infoContent: { gap: 4 },
+  placeName: { marginBottom: 8 },
+  infoRow: { marginBottom: 4, color: "#333" },
+  mapButton: { marginBottom: 24 },
+  sectionTitle: { marginBottom: 12 },
+  addPhotoButton: { marginBottom: 16 },
+  photoBlock: { marginBottom: 16 },
+  photoImage: {
+    width: "100%",
+    aspectRatio: 4 / 3,
+    borderRadius: 12,
+    marginBottom: 8,
+  },
+  deletePhotoButton: {},
   hint: { color: "#666", fontStyle: "italic" },
 });
