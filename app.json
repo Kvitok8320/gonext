@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "gonext",
+    "slug": "gonext",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "gonext",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gonext.app"
+    },
+    "android": {
+      "package": "com.gonext.app"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
