@@ -75,7 +75,7 @@ export default function NextPlaceScreen() {
     );
   }
 
-  const noCurrentTrip = state?.currentTrip === null;
+  const noCurrentTrip = !state || state.currentTrip === null;
   const noPlacesInRoute = state?.currentTrip && state.placeCount === 0;
   const allVisited =
     state?.currentTrip && state.placeCount > 0 && !state?.nextPlace;
@@ -95,30 +95,54 @@ export default function NextPlaceScreen() {
               Нет текущей поездки
             </Text>
             <Text variant="bodySmall" style={styles.hint}>
-              Выберите текущую поездку в разделе «Поездки»
+              Создайте поездку или выберите текущую в разделе «Поездки»
             </Text>
+            <Button
+              mode="contained"
+              icon="map-marker"
+              onPress={() => router.push("/trips")}
+              style={styles.actionButton}
+            >
+              Перейти к поездкам
+            </Button>
           </View>
         )}
 
-        {noPlacesInRoute && (
+        {noPlacesInRoute && state?.currentTrip && (
           <View style={styles.center}>
             <Text variant="bodyLarge" style={styles.message}>
               Нет мест в маршруте
             </Text>
             <Text variant="bodySmall" style={styles.hint}>
-              Добавьте места в поездку «{state?.currentTrip?.title}»
+              Добавьте места в поездку «{state.currentTrip.title}»
             </Text>
+            <Button
+              mode="contained"
+              icon="plus"
+              onPress={() => router.push(`/trips/${state.currentTrip!.id}`)}
+              style={styles.actionButton}
+            >
+              Добавить места
+            </Button>
           </View>
         )}
 
-        {allVisited && (
+        {allVisited && state?.currentTrip && (
           <View style={styles.center}>
             <Text variant="bodyLarge" style={styles.message}>
               Все места посещены!
             </Text>
             <Text variant="bodySmall" style={styles.hint}>
-              Отличная поездка в «{state?.currentTrip?.title}»
+              Отличная поездка в «{state.currentTrip.title}»
             </Text>
+            <Button
+              mode="contained-tonal"
+              icon="map-marker"
+              onPress={() => router.push(`/trips/${state.currentTrip!.id}`)}
+              style={styles.actionButton}
+            >
+              Открыть поездку
+            </Button>
           </View>
         )}
 
@@ -197,7 +221,8 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   message: { textAlign: "center", marginBottom: 8 },
-  hint: { textAlign: "center", color: "#666" },
+  hint: { textAlign: "center", color: "#666", marginBottom: 16 },
+  actionButton: { marginTop: 8 },
   card: { marginBottom: 24 },
   placeName: { marginBottom: 8 },
   description: { color: "#555", marginBottom: 8 },
