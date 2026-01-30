@@ -9,7 +9,6 @@ import {
   View,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
 import { useSQLiteContext } from "expo-sqlite";
 import {
   Appbar,
@@ -20,7 +19,7 @@ import {
   TextInput,
 } from "react-native-paper";
 import { getTripPlaceById, updateTripPlace } from "../../../../db/tripPlaces";
-import { ensureTripPlacePhotoDir } from "../../../../utils/photos";
+import { ensureTripPlacePhotoDir, saveImageFromPicker } from "../../../../utils/photos";
 import type { TripPlaceWithPlace } from "../../../../types";
 
 function openOnMap(lat: number, lon: number) {
@@ -78,16 +77,23 @@ export default function TripPlaceDetailScreen() {
       mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [4, 3],
+      base64: true,
     });
     if (result.canceled || !result.assets[0]) return;
-    const uri = result.assets[0].uri;
-    const dir = await ensureTripPlacePhotoDir(tripPlace.id);
-    const filename = `photo_${Date.now()}.jpg`;
-    const destPath = `${dir}/${filename}`;
-    await FileSystem.copyAsync({ from: uri, to: destPath });
-    const newPhotos = [...tripPlace.photos, destPath];
-    await updateTripPlace(db, tripPlace.id, { photos: newPhotos });
-    setTripPlace({ ...tripPlace, photos: newPhotos });
+    try {
+      const dir = await ensureTripPlacePhotoDir(tripPlace.id);
+      const filename = `photo_${Date.now()}.jpg`;
+      const destPath = await saveImageFromPicker(
+        result.assets[0],
+        dir,
+        filename
+      );
+      const newPhotos = [...tripPlace.photos, destPath];
+      await updateTripPlace(db, tripPlace.id, { photos: newPhotos });
+      setTripPlace({ ...tripPlace, photos: newPhotos });
+    } catch (err) {
+      Alert.alert("Ошибка", "Не удалось сохранить фото");
+    }
   };
 
   const handleDeletePhoto = async (index: number) => {

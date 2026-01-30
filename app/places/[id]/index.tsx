@@ -9,7 +9,6 @@ import {
   View,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
 import { useSQLiteContext } from "expo-sqlite";
 import {
   Appbar,
@@ -21,7 +20,7 @@ import {
   Text,
 } from "react-native-paper";
 import { getPlaceById, updatePlace, deletePlace } from "../../../db/places";
-import { ensurePlacePhotoDir } from "../../../utils/photos";
+import { ensurePlacePhotoDir, saveImageFromPicker } from "../../../utils/photos";
 import type { Place } from "../../../types";
 
 function openOnMap(place: Place) {
@@ -65,16 +64,23 @@ export default function PlaceDetailScreen() {
       mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [4, 3],
+      base64: true,
     });
     if (result.canceled || !result.assets[0]) return;
-    const uri = result.assets[0].uri;
-    const dir = await ensurePlacePhotoDir(place.id);
-    const filename = `photo_${Date.now()}.jpg`;
-    const destPath = `${dir}/${filename}`;
-    await FileSystem.copyAsync({ from: uri, to: destPath });
-    const newPhotos = [...place.photos, destPath];
-    await updatePlace(db, place.id, { photos: newPhotos });
-    setPlace({ ...place, photos: newPhotos });
+    try {
+      const dir = await ensurePlacePhotoDir(place.id);
+      const filename = `photo_${Date.now()}.jpg`;
+      const destPath = await saveImageFromPicker(
+        result.assets[0],
+        dir,
+        filename
+      );
+      const newPhotos = [...place.photos, destPath];
+      await updatePlace(db, place.id, { photos: newPhotos });
+      setPlace({ ...place, photos: newPhotos });
+    } catch (err) {
+      Alert.alert("Ошибка", "Не удалось сохранить фото");
+    }
   };
 
   const handleDeletePhoto = async (index: number) => {

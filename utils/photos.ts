@@ -1,4 +1,4 @@
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 
 const BASE_DIR = `${FileSystem.documentDirectory}gonext_photos`;
 
@@ -42,4 +42,29 @@ export async function ensureTripPlacePhotoDir(
     await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
   }
   return dir;
+}
+
+type ImagePickerAsset = { uri: string; base64?: string | null };
+
+/**
+ * Сохраняет изображение из ImagePicker в указанный каталог.
+ * Использует base64 при наличии (надёжно на Android с content:// URI),
+ * иначе copyAsync.
+ */
+export async function saveImageFromPicker(
+  asset: ImagePickerAsset,
+  destDir: string,
+  filename: string
+): Promise<string> {
+  const destPath = `${destDir}/${filename}`;
+
+  if (asset.base64) {
+    await FileSystem.writeAsStringAsync(destPath, asset.base64, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+    return destPath;
+  }
+
+  await FileSystem.copyAsync({ from: asset.uri, to: destPath });
+  return destPath;
 }
