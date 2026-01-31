@@ -114,7 +114,7 @@ export default function TripPlaceDetailScreen() {
             <Appbar.Content title="Место" />
           </Appbar.Header>
           <View style={styles.center}>
-            <Text variant="bodyLarge">
+            <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>
               {loading ? "Загрузка..." : "Не найдено"}
             </Text>
           </View>
@@ -158,7 +158,7 @@ export default function TripPlaceDetailScreen() {
           </Card.Content>
         </Card>
 
-        <Text variant="titleSmall" style={styles.sectionTitle}>
+        <Text variant="titleSmall" style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>
           Заметки
         </Text>
         <TextInput
@@ -172,7 +172,7 @@ export default function TripPlaceDetailScreen() {
           onBlur={handleSaveNotes}
         />
 
-        <Text variant="titleSmall" style={styles.sectionTitle}>
+        <Text variant="titleSmall" style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>
           Фотографии
         </Text>
         <View style={styles.photosRow}>

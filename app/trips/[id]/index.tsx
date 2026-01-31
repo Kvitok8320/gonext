@@ -139,7 +139,7 @@ export default function TripDetailScreen() {
             <Appbar.Content title="Поездка" />
           </Appbar.Header>
           <View style={styles.center}>
-            <Text variant="bodyLarge">
+            <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>
               {loading ? "Загрузка..." : "Не найдено"}
             </Text>
           </View>
@@ -195,7 +195,7 @@ export default function TripDetailScreen() {
         </Card>
 
         <View style={styles.sectionHeader}>
-          <Text variant="titleMedium">Маршрут</Text>
+          <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>Маршрут</Text>
           <Text variant="bodySmall" style={[styles.progress, { color: theme.colors.onSurfaceVariant }]}>
             {visitedCount} / {places.length} посещено
           </Text>

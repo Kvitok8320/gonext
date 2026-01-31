@@ -111,7 +111,7 @@ export default function PlaceDetailScreen() {
           <Appbar.Content title="Место" />
         </Appbar.Header>
         <View style={styles.center}>
-          <Text variant="bodyLarge">{loading ? "Загрузка..." : "Не найдено"}</Text>
+          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{loading ? "Загрузка..." : "Не найдено"}</Text>
         </View>
       </View>
     );
@@ -131,7 +131,7 @@ export default function PlaceDetailScreen() {
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
         <Card style={styles.infoCard}>
           <Card.Content style={styles.infoContent}>
-            <Text variant="titleLarge" style={styles.placeName}>
+            <Text variant="titleLarge" style={[styles.placeName, { color: theme.colors.onSurface }]}>
               {place.name}
             </Text>
             {place.description ? (
@@ -164,7 +164,7 @@ export default function PlaceDetailScreen() {
           </Button>
         )}
 
-        <Text variant="titleMedium" style={styles.sectionTitle}>
+        <Text variant="titleMedium" style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>
           Фотографии
         </Text>
         <Button

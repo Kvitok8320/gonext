@@ -12,6 +12,7 @@ import {
   List,
   Searchbar,
   Text,
+  useTheme,
 } from "react-native-paper";
 import { useRouter } from "expo-router";
 import { getAllPlaces } from "../../db/places";
@@ -21,6 +22,7 @@ import { ScreenWithBackground } from "../../components/ScreenWithBackground";
 export default function PlacesScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
+  const theme = useTheme();
   const [places, setPlaces] = useState<Place[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -66,11 +68,11 @@ export default function PlacesScreen() {
 
       {loading ? (
         <View style={styles.center}>
-          <Text variant="bodyLarge">Загрузка...</Text>
+          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Загрузка...</Text>
         </View>
       ) : filteredPlaces.length === 0 ? (
         <View style={styles.center}>
-          <Text variant="bodyLarge">
+          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>
             {searchQuery.trim() ? "Ничего не найдено" : "Нет мест. Добавьте первое!"}
           </Text>
         </View>

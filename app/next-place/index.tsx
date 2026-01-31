@@ -31,6 +31,7 @@ export default function NextPlaceScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
+
   const [loading, setLoading] = useState(true);
   const [state, setState] = useState<{
     currentTrip: { id: string; title: string } | null;
@@ -73,7 +74,7 @@ export default function NextPlaceScreen() {
             <Appbar.Content title="Следующее место" />
           </Appbar.Header>
           <View style={styles.center}>
-            <Text variant="bodyLarge">Загрузка...</Text>
+            <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Загрузка...</Text>
           </View>
         </View>
       </ScreenWithBackground>
@@ -97,7 +98,7 @@ export default function NextPlaceScreen() {
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
         {noCurrentTrip && (
           <View style={styles.center}>
-            <Text variant="bodyLarge" style={styles.message}>
+            <Text variant="bodyLarge" style={[styles.message, { color: theme.colors.onSurface }]}>
               Нет текущей поездки
             </Text>
             <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
@@ -116,7 +117,7 @@ export default function NextPlaceScreen() {
 
         {noPlacesInRoute && state?.currentTrip && (
           <View style={styles.center}>
-            <Text variant="bodyLarge" style={styles.message}>
+            <Text variant="bodyLarge" style={[styles.message, { color: theme.colors.onSurface }]}>
               Нет мест в маршруте
             </Text>
             <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
@@ -135,7 +136,7 @@ export default function NextPlaceScreen() {
 
         {allVisited && state?.currentTrip && (
           <View style={styles.center}>
-            <Text variant="bodyLarge" style={styles.message}>
+            <Text variant="bodyLarge" style={[styles.message, { color: theme.colors.onSurface }]}>
               Все места посещены!
             </Text>
             <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
@@ -156,7 +157,7 @@ export default function NextPlaceScreen() {
           <>
             <Card style={styles.card}>
               <Card.Content>
-                <Text variant="titleLarge" style={styles.placeName}>
+                <Text variant="titleLarge" style={[styles.placeName, { color: theme.colors.onSurface }]}>
                   {state.nextPlace.place.name}
                 </Text>
                 {state.nextPlace.place.description ? (

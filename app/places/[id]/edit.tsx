@@ -99,7 +99,7 @@ export default function EditPlaceScreen() {
             <Appbar.Content title="Редактирование" />
           </Appbar.Header>
           <View style={styles.center}>
-            <Text variant="bodyLarge">Загрузка...</Text>
+            <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Загрузка...</Text>
           </View>
         </View>
       </ScreenWithBackground>

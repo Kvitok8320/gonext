@@ -7,6 +7,7 @@ import {
   List,
   Searchbar,
   Text,
+  useTheme,
 } from "react-native-paper";
 import { getAllPlaces } from "../../../db/places";
 import { getTripPlacesByTripId, addTripPlace } from "../../../db/tripPlaces";
@@ -17,6 +18,7 @@ export default function AddPlaceToTripScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const db = useSQLiteContext();
+  const theme = useTheme();
   const [places, setPlaces] = useState<Place[]>([]);
   const [tripPlaceIds, setTripPlaceIds] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState("");
@@ -77,11 +79,11 @@ export default function AddPlaceToTripScreen() {
 
       {loading ? (
         <View style={styles.center}>
-          <Text variant="bodyLarge">Загрузка...</Text>
+          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Загрузка...</Text>
         </View>
       ) : availablePlaces.length === 0 ? (
         <View style={styles.center}>
-          <Text variant="bodyLarge">
+          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>
             {searchQuery.trim()
               ? "Ничего не найдено"
               : "Все места уже добавлены или список мест пуст"}

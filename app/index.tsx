@@ -1,10 +1,11 @@
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import { Appbar, Button, Surface, Text } from "react-native-paper";
+import { Appbar, Button, Surface, Text, useTheme } from "react-native-paper";
 import { ScreenWithBackground } from "../components/ScreenWithBackground";
 
 export default function HomeScreen() {
   const router = useRouter();
+  const theme = useTheme();
 
   return (
     <ScreenWithBackground>
@@ -13,7 +14,7 @@ export default function HomeScreen() {
       </Appbar.Header>
 
       <Surface style={styles.content} elevation={0}>
-        <Text variant="titleMedium" style={styles.subtitle}>
+        <Text variant="titleMedium" style={[styles.subtitle, { color: theme.colors.onSurface }]}>
           Дневник туриста
         </Text>
         <Button

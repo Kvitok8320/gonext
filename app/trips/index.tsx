@@ -52,11 +52,11 @@ export default function TripsScreen() {
 
       {loading ? (
         <View style={styles.center}>
-          <Text variant="bodyLarge">Загрузка...</Text>
+          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Загрузка...</Text>
         </View>
       ) : trips.length === 0 ? (
         <View style={styles.center}>
-          <Text variant="bodyLarge">Нет поездок. Создайте первую!</Text>
+          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Нет поездок. Создайте первую!</Text>
         </View>
       ) : (
         <FlatList
