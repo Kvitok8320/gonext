@@ -1,9 +1,8 @@
+import color from "color";
 import { MD3DarkTheme, MD3LightTheme } from "react-native-paper";
 
 /**
  * Явные цвета текста для гарантированной читаемости в каждой теме.
- * Светлая тема: тёмный текст на светлом фоне.
- * Тёмная тема: светлый текст на тёмном фоне.
  */
 export const THEME_TEXT_COLORS = {
   light: {
@@ -18,28 +17,51 @@ export const THEME_TEXT_COLORS = {
   },
 } as const;
 
-/**
- * Светлая тема с усиленным контрастом текста.
- */
-export const AppLightTheme = {
-  ...MD3LightTheme,
-  colors: {
-    ...MD3LightTheme.colors,
-    onSurface: THEME_TEXT_COLORS.light.primary,
-    onSurfaceVariant: THEME_TEXT_COLORS.light.secondary,
-    onBackground: THEME_TEXT_COLORS.light.primary,
-  },
-};
+function buildPrimaryPalette(hex: string, isDark: boolean) {
+  const c = color(hex);
+  const onPrimary = c.luminosity() > 0.5 ? "#000000" : "#FFFFFF";
+  return {
+    primary: hex,
+    primaryContainer: isDark
+      ? c.mix(color("#000"), 0.7).hex()
+      : c.mix(color("#FFF"), 0.9).hex(),
+    onPrimary,
+    onPrimaryContainer: isDark
+      ? c.mix(color("#FFF"), 0.9).hex()
+      : c.mix(color("#000"), 0.8).hex(),
+  };
+}
 
 /**
- * Тёмная тема с усиленным контрастом текста.
+ * Светлая тема с кастомным primary цветом.
  */
-export const AppDarkTheme = {
-  ...MD3DarkTheme,
-  colors: {
-    ...MD3DarkTheme.colors,
-    onSurface: THEME_TEXT_COLORS.dark.primary,
-    onSurfaceVariant: THEME_TEXT_COLORS.dark.secondary,
-    onBackground: THEME_TEXT_COLORS.dark.primary,
-  },
-};
+export function buildAppLightTheme(primaryHex: string) {
+  const palette = buildPrimaryPalette(primaryHex, false);
+  return {
+    ...MD3LightTheme,
+    colors: {
+      ...MD3LightTheme.colors,
+      ...palette,
+      onSurface: THEME_TEXT_COLORS.light.primary,
+      onSurfaceVariant: THEME_TEXT_COLORS.light.secondary,
+      onBackground: THEME_TEXT_COLORS.light.primary,
+    },
+  };
+}
+
+/**
+ * Тёмная тема с кастомным primary цветом.
+ */
+export function buildAppDarkTheme(primaryHex: string) {
+  const palette = buildPrimaryPalette(primaryHex, true);
+  return {
+    ...MD3DarkTheme,
+    colors: {
+      ...MD3DarkTheme.colors,
+      ...palette,
+      onSurface: THEME_TEXT_COLORS.dark.primary,
+      onSurfaceVariant: THEME_TEXT_COLORS.dark.secondary,
+      onBackground: THEME_TEXT_COLORS.dark.primary,
+    },
+  };
+}
