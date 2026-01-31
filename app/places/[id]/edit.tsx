@@ -28,6 +28,8 @@ export default function EditPlaceScreen() {
   const { t } = useTranslation();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [name_en, setNameEn] = useState("");
+  const [description_en, setDescriptionEn] = useState("");
   const [visitlater, setVisitlater] = useState(true);
   const [liked, setLiked] = useState(false);
   const [latitude, setLatitude] = useState("");
@@ -44,6 +46,8 @@ export default function EditPlaceScreen() {
       if (p) {
         setName(p.name);
         setDescription(p.description);
+        setNameEn(p.name_en ?? "");
+        setDescriptionEn(p.description_en ?? "");
         setVisitlater(p.visitlater);
         setLiked(p.liked);
         setLatitude(p.latitude != null ? String(p.latitude) : "");
@@ -81,6 +85,8 @@ export default function EditPlaceScreen() {
       await updatePlace(db, id, {
         name: name.trim(),
         description: description.trim(),
+        name_en: name_en.trim(),
+        description_en: description_en.trim(),
         visitlater,
         liked,
         latitude: lat,
@@ -135,6 +141,24 @@ export default function EditPlaceScreen() {
             mode="outlined"
             multiline
             numberOfLines={3}
+            style={styles.input}
+          />
+          <TextInput
+            label={t("places.nameEnLabel")}
+            value={name_en}
+            onChangeText={setNameEn}
+            mode="outlined"
+            placeholder={t("common.optional")}
+            style={styles.input}
+          />
+          <TextInput
+            label={t("places.descriptionEnLabel")}
+            value={description_en}
+            onChangeText={setDescriptionEn}
+            mode="outlined"
+            multiline
+            numberOfLines={2}
+            placeholder={t("common.optional")}
             style={styles.input}
           />
           <View style={styles.row}>

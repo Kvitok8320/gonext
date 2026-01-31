@@ -11,6 +11,8 @@ function rowToPlace(row: Record<string, unknown>): Place {
     id: String(row.id),
     name: String(row.name),
     description: String(row.description ?? ""),
+    name_en: row.name_en != null ? String(row.name_en) : undefined,
+    description_en: row.description_en != null ? String(row.description_en) : undefined,
     visitlater: Boolean(row.visitlater),
     liked: Boolean(row.liked),
     latitude: row.latitude != null ? Number(row.latitude) : null,
@@ -43,11 +45,13 @@ export async function createPlace(
   const photosJson = JSON.stringify(data.photos ?? []);
 
   await db.runAsync(
-    `INSERT INTO ${TABLE} (id, name, description, visitlater, liked, latitude, longitude, photos, createdAt)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO ${TABLE} (id, name, description, name_en, description_en, visitlater, liked, latitude, longitude, photos, createdAt)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     id,
     data.name,
     data.description ?? "",
+    data.name_en ?? "",
+    data.description_en ?? "",
     data.visitlater ? 1 : 0,
     data.liked ? 1 : 0,
     data.latitude ?? null,
@@ -74,6 +78,8 @@ export async function updatePlace(
 
   const name = data.name ?? place.name;
   const description = data.description ?? place.description;
+  const name_en = data.name_en !== undefined ? data.name_en : place.name_en ?? "";
+  const description_en = data.description_en !== undefined ? data.description_en : place.description_en ?? "";
   const visitlater = data.visitlater ?? place.visitlater;
   const liked = data.liked ?? place.liked;
   const latitude = data.latitude !== undefined ? data.latitude : place.latitude;
@@ -83,9 +89,11 @@ export async function updatePlace(
   const photosJson = JSON.stringify(photos);
 
   await db.runAsync(
-    `UPDATE ${TABLE} SET name = ?, description = ?, visitlater = ?, liked = ?, latitude = ?, longitude = ?, photos = ? WHERE id = ?`,
+    `UPDATE ${TABLE} SET name = ?, description = ?, name_en = ?, description_en = ?, visitlater = ?, liked = ?, latitude = ?, longitude = ?, photos = ? WHERE id = ?`,
     name,
     description,
+    name_en,
+    description_en,
     visitlater ? 1 : 0,
     liked ? 1 : 0,
     latitude ?? null,

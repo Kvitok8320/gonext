@@ -1,6 +1,6 @@
 import type { SQLiteDatabase } from "expo-sqlite";
 
-const DATABASE_VERSION = 1;
+const DATABASE_VERSION = 2;
 
 /**
  * Миграции при первом запуске: создаёт таблицы places, trips, trip_places,
@@ -25,6 +25,8 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase): Promise<void> {
         id TEXT PRIMARY KEY NOT NULL,
         name TEXT NOT NULL,
         description TEXT NOT NULL DEFAULT '',
+        name_en TEXT NOT NULL DEFAULT '',
+        description_en TEXT NOT NULL DEFAULT '',
         visitlater INTEGER NOT NULL DEFAULT 1,
         liked INTEGER NOT NULL DEFAULT 0,
         latitude REAL,
@@ -45,6 +47,8 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase): Promise<void> {
         id TEXT PRIMARY KEY NOT NULL,
         title TEXT NOT NULL,
         description TEXT NOT NULL DEFAULT '',
+        title_en TEXT NOT NULL DEFAULT '',
+        description_en TEXT NOT NULL DEFAULT '',
         startDate TEXT,
         endDate TEXT,
         createdAt TEXT NOT NULL,
@@ -78,6 +82,13 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase): Promise<void> {
       CREATE INDEX IF NOT EXISTS idx_trip_places_placeId ON trip_places(placeId);
       CREATE INDEX IF NOT EXISTS idx_trip_place_photos_tripPlaceId ON trip_place_photos(tripPlaceId);
     `);
+  }
+
+  if (currentVersion === 1) {
+    await db.execAsync(`ALTER TABLE places ADD COLUMN name_en TEXT DEFAULT ''`);
+    await db.execAsync(`ALTER TABLE places ADD COLUMN description_en TEXT DEFAULT ''`);
+    await db.execAsync(`ALTER TABLE trips ADD COLUMN title_en TEXT DEFAULT ''`);
+    await db.execAsync(`ALTER TABLE trips ADD COLUMN description_en TEXT DEFAULT ''`);
   }
 
   await db.runAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);

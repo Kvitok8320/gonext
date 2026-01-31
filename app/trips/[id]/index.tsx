@@ -33,6 +33,7 @@ import {
 } from "../../../db/tripPlaces";
 import type { Trip } from "../../../types";
 import type { TripPlaceWithPlace } from "../../../types";
+import { getPlaceName, getPlaceDescription, getTripTitle, getTripDescription } from "../../../utils/localize";
 import { ScreenWithBackground } from "../../../components/ScreenWithBackground";
 
 export default function TripDetailScreen() {
@@ -109,7 +110,7 @@ export default function TripDetailScreen() {
   };
 
   const handleDeleteTrip = () => {
-    Alert.alert(t("alerts.deleteTrip"), trip?.title ?? "", [
+    Alert.alert(t("alerts.deleteTrip"), trip ? getTripTitle(trip, i18n.language) : "", [
       { text: t("common.cancel"), style: "cancel" },
       {
         text: t("common.delete"),
@@ -157,7 +158,7 @@ export default function TripDetailScreen() {
       <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title={trip.title} />
+        <Appbar.Content title={getTripTitle(trip, i18n.language)} />
         <Appbar.Action
           icon="pencil"
           onPress={() => router.push(`/trips/${trip.id}/edit`)}
@@ -211,11 +212,11 @@ export default function TripDetailScreen() {
           places.map((tp, index) => (
             <Card key={tp.id} style={styles.placeCard}>
               <List.Item
-                title={tp.place.name}
+                title={getPlaceName(tp.place, i18n.language)}
                 description={
                   tp.visited && tp.visitDate
                     ? `${t("trips.visited")}: ${formatDate(tp.visitDate)}`
-                    : tp.place.description || undefined
+                    : getPlaceDescription(tp.place, i18n.language) || undefined
                 }
                 left={() => (
                   <View style={styles.listLeft}>

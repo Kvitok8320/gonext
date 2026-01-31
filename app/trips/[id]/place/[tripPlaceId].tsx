@@ -23,6 +23,7 @@ import {
 import { getTripPlaceById, updateTripPlace } from "../../../../db/tripPlaces";
 import { ensureTripPlacePhotoDir, saveImageFromPicker } from "../../../../utils/photos";
 import type { TripPlaceWithPlace } from "../../../../types";
+import { getPlaceName, getPlaceDescription } from "../../../../utils/localize";
 import { ScreenWithBackground } from "../../../../components/ScreenWithBackground";
 
 function openOnMap(lat: number, lon: number) {
@@ -142,15 +143,15 @@ export default function TripPlaceDetailScreen() {
       <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title={place.name} />
+        <Appbar.Content title={getPlaceName(place, i18n.language)} />
       </Appbar.Header>
 
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
         <Card style={styles.card}>
           <Card.Content>
-            {place.description ? (
+            {getPlaceDescription(place, i18n.language) ? (
               <Text variant="bodyMedium" style={[styles.desc, { color: theme.colors.onSurfaceVariant }]}>
-                {place.description}
+                {getPlaceDescription(place, i18n.language)}
               </Text>
             ) : null}
             {tripPlace.visited && tripPlace.visitDate && (

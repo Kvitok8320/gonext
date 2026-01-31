@@ -27,6 +27,8 @@ export default function AddPlaceScreen() {
   const { t } = useTranslation();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [name_en, setNameEn] = useState("");
+  const [description_en, setDescriptionEn] = useState("");
   const [visitlater, setVisitlater] = useState(true);
   const [liked, setLiked] = useState(false);
   const [latitude, setLatitude] = useState("");
@@ -56,6 +58,8 @@ export default function AddPlaceScreen() {
       await createPlace(db, {
         name: name.trim(),
         description: description.trim(),
+        name_en: name_en.trim() || undefined,
+        description_en: description_en.trim() || undefined,
         visitlater,
         liked,
         latitude: lat,
@@ -95,6 +99,24 @@ export default function AddPlaceScreen() {
             mode="outlined"
             multiline
             numberOfLines={3}
+            style={styles.input}
+          />
+          <TextInput
+            label={t("places.nameEnLabel")}
+            value={name_en}
+            onChangeText={setNameEn}
+            mode="outlined"
+            placeholder={t("common.optional")}
+            style={styles.input}
+          />
+          <TextInput
+            label={t("places.descriptionEnLabel")}
+            value={description_en}
+            onChangeText={setDescriptionEn}
+            mode="outlined"
+            multiline
+            numberOfLines={2}
+            placeholder={t("common.optional")}
             style={styles.input}
           />
           <View style={styles.row}>

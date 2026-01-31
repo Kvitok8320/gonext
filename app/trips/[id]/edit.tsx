@@ -28,6 +28,8 @@ export default function EditTripScreen() {
   const { t } = useTranslation();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [title_en, setTitleEn] = useState("");
+  const [description_en, setDescriptionEn] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [current, setCurrent] = useState(false);
@@ -39,13 +41,15 @@ export default function EditTripScreen() {
     if (!id) return;
     setLoading(true);
     try {
-      const t = await getTripById(db, id);
-      if (t) {
-        setTitle(t.title);
-        setDescription(t.description);
-        setStartDate(t.startDate ?? "");
-        setEndDate(t.endDate ?? "");
-        setCurrent(t.current);
+      const trip = await getTripById(db, id);
+      if (trip) {
+        setTitle(trip.title);
+        setDescription(trip.description);
+        setTitleEn(trip.title_en ?? "");
+        setDescriptionEn(trip.description_en ?? "");
+        setStartDate(trip.startDate ?? "");
+        setEndDate(trip.endDate ?? "");
+        setCurrent(trip.current);
       }
     } finally {
       setLoading(false);
@@ -81,6 +85,8 @@ export default function EditTripScreen() {
       await updateTrip(db, id, {
         title: title.trim(),
         description: description.trim(),
+        title_en: title_en.trim(),
+        description_en: description_en.trim(),
         startDate: sd,
         endDate: ed,
         current,
@@ -136,8 +142,26 @@ export default function EditTripScreen() {
             numberOfLines={3}
             style={styles.input}
           />
+          <TextInput
+            label={t("trips.titleEnLabel")}
+            value={title_en}
+            onChangeText={setTitleEn}
+            mode="outlined"
+            placeholder={t("common.optional")}
+            style={styles.input}
+          />
+          <TextInput
+            label={t("trips.descriptionEnLabel")}
+            value={description_en}
+            onChangeText={setDescriptionEn}
+            mode="outlined"
+            multiline
+            numberOfLines={2}
+            placeholder={t("common.optional")}
+            style={styles.input}
+          />
           <Text variant="labelMedium" style={styles.label}>
-            Даты
+            {t("trips.datesLabel")}
           </Text>
           <TextInput
             label={t("trips.startDateLabel")}

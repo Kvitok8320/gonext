@@ -14,6 +14,7 @@ import {
   useTheme,
 } from "react-native-paper";
 import { getAllTrips } from "../../db/trips";
+import { getTripTitle, getTripDescription } from "../../utils/localize";
 import type { Trip } from "../../types";
 import { ScreenWithBackground } from "../../components/ScreenWithBackground";
 
@@ -83,9 +84,9 @@ export default function TripsScreen() {
                     </Chip>
                   )}
                 </View>
-                {item.description ? (
+                {getTripDescription(item, i18n.language) ? (
                   <Text variant="bodySmall" numberOfLines={2} style={[styles.desc, { color: theme.colors.onSurfaceVariant }]}>
-                    {item.description}
+                    {getTripDescription(item, i18n.language)}
                   </Text>
                 ) : null}
                 <Text variant="labelSmall" style={[styles.dates, { color: theme.colors.onSurfaceVariant }]}>

@@ -13,6 +13,7 @@ import {
 import { getAllPlaces } from "../../../db/places";
 import { getTripPlacesByTripId, addTripPlace } from "../../../db/tripPlaces";
 import type { Place } from "../../../types";
+import { getPlaceName, getPlaceDescription } from "../../../utils/localize";
 import { ScreenWithBackground } from "../../../components/ScreenWithBackground";
 
 export default function AddPlaceToTripScreen() {
@@ -20,7 +21,7 @@ export default function AddPlaceToTripScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [places, setPlaces] = useState<Place[]>([]);
   const [tripPlaceIds, setTripPlaceIds] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState("");
@@ -45,11 +46,12 @@ export default function AddPlaceToTripScreen() {
     loadData();
   }, [loadData]);
 
+  const lang = i18n.language;
   const filteredPlaces = searchQuery.trim()
     ? places.filter(
         (p) =>
-          p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          p.description.toLowerCase().includes(searchQuery.toLowerCase())
+          getPlaceName(p, lang).toLowerCase().includes(searchQuery.toLowerCase()) ||
+          getPlaceDescription(p, lang).toLowerCase().includes(searchQuery.toLowerCase())
       )
     : places;
 
@@ -97,8 +99,8 @@ export default function AddPlaceToTripScreen() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <List.Item
-              title={item.name}
-              description={item.description || t("places.noDescription")}
+              title={getPlaceName(item, lang)}
+              description={getPlaceDescription(item, lang) || t("places.noDescription")}
               right={(props) => (
                 <List.Icon {...props} icon="plus" />
               )}

@@ -27,6 +27,8 @@ export default function AddTripScreen() {
   const { t } = useTranslation();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [title_en, setTitleEn] = useState("");
+  const [description_en, setDescriptionEn] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [current, setCurrent] = useState(false);
@@ -57,6 +59,8 @@ export default function AddTripScreen() {
       await createTrip(db, {
         title: title.trim(),
         description: description.trim(),
+        title_en: title_en.trim() || undefined,
+        description_en: description_en.trim() || undefined,
         startDate: sd,
         endDate: ed,
         current,
@@ -72,7 +76,7 @@ export default function AddTripScreen() {
       <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Создать поездку" />
+        <Appbar.Content title={t("trips.addTrip")} />
       </Appbar.Header>
 
       <KeyboardAvoidingView
@@ -88,7 +92,7 @@ export default function AddTripScreen() {
             style={styles.input}
           />
           <TextInput
-            label="Описание"
+            label={t("trips.descriptionLabel")}
             value={description}
             onChangeText={setDescription}
             mode="outlined"
@@ -96,8 +100,26 @@ export default function AddTripScreen() {
             numberOfLines={3}
             style={styles.input}
           />
+          <TextInput
+            label={t("trips.titleEnLabel")}
+            value={title_en}
+            onChangeText={setTitleEn}
+            mode="outlined"
+            placeholder={t("common.optional")}
+            style={styles.input}
+          />
+          <TextInput
+            label={t("trips.descriptionEnLabel")}
+            value={description_en}
+            onChangeText={setDescriptionEn}
+            mode="outlined"
+            multiline
+            numberOfLines={2}
+            placeholder={t("common.optional")}
+            style={styles.input}
+          />
           <Text variant="labelMedium" style={styles.label}>
-            Даты
+            {t("trips.datesLabel")}
           </Text>
           <TextInput
             label={t("trips.startDateLabel")}

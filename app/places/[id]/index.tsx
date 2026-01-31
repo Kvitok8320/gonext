@@ -21,6 +21,7 @@ import {
 import { getPlaceById, updatePlace, deletePlace } from "../../../db/places";
 import { ensurePlacePhotoDir, saveImageFromPicker } from "../../../utils/photos";
 import type { Place } from "../../../types";
+import { getPlaceName, getPlaceDescription } from "../../../utils/localize";
 
 function openOnMap(place: Place) {
   if (place.latitude == null || place.longitude == null) {
@@ -91,7 +92,7 @@ export default function PlaceDetailScreen() {
   };
 
   const handleDeletePlace = () => {
-    Alert.alert(t("alerts.deletePlace"), place?.name ?? "", [
+    Alert.alert(t("alerts.deletePlace"), place ? getPlaceName(place, i18n.language) : "", [
       { text: t("common.cancel"), style: "cancel" },
       {
         text: t("common.delete"),
@@ -134,11 +135,11 @@ export default function PlaceDetailScreen() {
         <Card style={styles.infoCard}>
           <Card.Content style={styles.infoContent}>
             <Text variant="titleLarge" style={[styles.placeName, { color: theme.colors.onSurface }]}>
-              {place.name}
+              {getPlaceName(place, i18n.language)}
             </Text>
-            {place.description ? (
+            {getPlaceDescription(place, i18n.language) ? (
               <Text variant="bodyMedium" style={[styles.infoRow, { color: theme.colors.onSurface }]}>
-                {place.description}
+                {getPlaceDescription(place, i18n.language)}
               </Text>
             ) : null}
             {hasCoords && (

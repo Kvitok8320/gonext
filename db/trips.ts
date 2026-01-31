@@ -8,6 +8,8 @@ function rowToTrip(row: Record<string, unknown>): Trip {
     id: String(row.id),
     title: String(row.title),
     description: String(row.description ?? ""),
+    title_en: row.title_en != null ? String(row.title_en) : undefined,
+    description_en: row.description_en != null ? String(row.description_en) : undefined,
     startDate: row.startDate != null ? String(row.startDate) : null,
     endDate: row.endDate != null ? String(row.endDate) : null,
     createdAt: String(row.createdAt),
@@ -53,11 +55,13 @@ export async function createTrip(
   }
 
   await db.runAsync(
-    `INSERT INTO ${TABLE} (id, title, description, startDate, endDate, createdAt, current)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO ${TABLE} (id, title, description, title_en, description_en, startDate, endDate, createdAt, current)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     id,
     data.title,
     data.description ?? "",
+    data.title_en ?? "",
+    data.description_en ?? "",
     data.startDate ?? null,
     data.endDate ?? null,
     createdAt,
@@ -85,14 +89,18 @@ export async function updateTrip(
 
   const title = data.title ?? trip.title;
   const description = data.description ?? trip.description;
+  const title_en = data.title_en !== undefined ? data.title_en : trip.title_en ?? "";
+  const description_en = data.description_en !== undefined ? data.description_en : trip.description_en ?? "";
   const startDate = data.startDate !== undefined ? data.startDate : trip.startDate;
   const endDate = data.endDate !== undefined ? data.endDate : trip.endDate;
   const current = data.current ?? trip.current;
 
   await db.runAsync(
-    `UPDATE ${TABLE} SET title = ?, description = ?, startDate = ?, endDate = ?, current = ? WHERE id = ?`,
+    `UPDATE ${TABLE} SET title = ?, description = ?, title_en = ?, description_en = ?, startDate = ?, endDate = ?, current = ? WHERE id = ?`,
     title,
     description,
+    title_en,
+    description_en,
     startDate ?? null,
     endDate ?? null,
     current ? 1 : 0,

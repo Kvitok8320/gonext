@@ -17,6 +17,7 @@ import {
 } from "react-native-paper";
 import { useRouter } from "expo-router";
 import { getAllPlaces } from "../../db/places";
+import { getPlaceName, getPlaceDescription } from "../../utils/localize";
 import type { Place } from "../../types";
 import { ScreenWithBackground } from "../../components/ScreenWithBackground";
 
@@ -45,11 +46,12 @@ export default function PlacesScreen() {
     }, [loadPlaces])
   );
 
+  const lang = i18n.language;
   const filteredPlaces = searchQuery.trim()
     ? places.filter(
         (p) =>
-          p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          p.description.toLowerCase().includes(searchQuery.toLowerCase())
+          getPlaceName(p, lang).toLowerCase().includes(searchQuery.toLowerCase()) ||
+          getPlaceDescription(p, lang).toLowerCase().includes(searchQuery.toLowerCase())
       )
     : places;
 
@@ -84,8 +86,8 @@ export default function PlacesScreen() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <List.Item
-              title={item.name}
-              description={item.description || t("places.noDescription")}
+              title={getPlaceName(item, lang)}
+              description={getPlaceDescription(item, lang) || t("places.noDescription")}
               left={(props) => (
                 <List.Icon {...props} icon={item.liked ? "heart" : "map-marker"} />
               )}

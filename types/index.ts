@@ -7,6 +7,10 @@ export interface Place {
   id: string;
   name: string;
   description: string;
+  /** Название на английском (опционально). */
+  name_en?: string;
+  /** Описание на английском (опционально). */
+  description_en?: string;
   visitlater: boolean;
   liked: boolean;
   /** Широта (Decimal Degrees). */
@@ -23,6 +27,10 @@ export interface Trip {
   id: string;
   title: string;
   description: string;
+  /** Название на английском (опционально). */
+  title_en?: string;
+  /** Описание на английском (опционально). */
+  description_en?: string;
   startDate: string | null; // ISO date
   endDate: string | null;
   createdAt: string;

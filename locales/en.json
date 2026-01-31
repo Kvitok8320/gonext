@@ -1,5 +1,6 @@
 {
   "common": {
+    "optional": "Optional",
     "cancel": "Cancel",
     "delete": "Delete",
     "save": "Save",
@@ -40,6 +41,8 @@
     "coordsLabel": "Coordinates (Decimal Degrees)",
     "latitudeLabel": "Latitude",
     "longitudeLabel": "Longitude",
+    "nameEnLabel": "Name (English)",
+    "descriptionEnLabel": "Description (English)",
     "errorName": "Enter name",
     "errorLatitude": "Latitude: -90 to 90",
     "errorLongitude": "Longitude: -180 to 180"
@@ -60,8 +63,11 @@
     "visited": "Visited",
     "nameLabel": "Name *",
     "descriptionLabel": "Description",
+    "datesLabel": "Dates",
     "startDateLabel": "Start date",
     "endDateLabel": "End date",
+    "titleEnLabel": "Title (English)",
+    "descriptionEnLabel": "Description (English)",
     "errorName": "Enter name",
     "errorDates": "Start date cannot be after end date",
     "allPlacesAdded": "All places already added or list is empty",

@@ -12,7 +12,8 @@ import {
 } from "react-native-paper";
 import { getCurrentTrip } from "../../db/trips";
 import { getTripPlacesWithPlaceByTripId } from "../../db/tripPlaces";
-import type { TripPlaceWithPlace } from "../../types";
+import type { Trip, TripPlaceWithPlace } from "../../types";
+import { getPlaceName, getPlaceDescription, getTripTitle } from "../../utils/localize";
 import { ScreenWithBackground } from "../../components/ScreenWithBackground";
 
 function openOnMap(lat: number, lon: number) {
@@ -32,11 +33,11 @@ export default function NextPlaceScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [loading, setLoading] = useState(true);
   const [state, setState] = useState<{
-    currentTrip: { id: string; title: string } | null;
+    currentTrip: Trip | null;
     nextPlace: TripPlaceWithPlace | null;
     placeCount: number;
   } | null>(null);
@@ -52,7 +53,7 @@ export default function NextPlaceScreen() {
       const places = await getTripPlacesWithPlaceByTripId(db, currentTrip.id);
       const first = places.find((tp) => !tp.visited) ?? null;
       setState({
-        currentTrip: { id: currentTrip.id, title: currentTrip.title },
+        currentTrip,
         nextPlace: first,
         placeCount: places.length,
       });
@@ -94,7 +95,7 @@ export default function NextPlaceScreen() {
       <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Следующее место" />
+        <Appbar.Content title={t("nextPlace.title")} />
       </Appbar.Header>
 
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
@@ -123,7 +124,7 @@ export default function NextPlaceScreen() {
               {t("nextPlace.noPlacesInRoute")}
             </Text>
             <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
-              {t("nextPlace.noPlacesHint", { title: state.currentTrip.title })}
+              {t("nextPlace.noPlacesHint", { title: getTripTitle(state.currentTrip, i18n.language) })}
             </Text>
             <Button
               mode="contained"
@@ -139,10 +140,10 @@ export default function NextPlaceScreen() {
         {allVisited && state?.currentTrip && (
           <View style={styles.center}>
             <Text variant="bodyLarge" style={[styles.message, { color: theme.colors.onSurface }]}>
-              Все места посещены!
+              {t("nextPlace.allVisited")}
             </Text>
             <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
-              Отличная поездка в «{state.currentTrip.title}»
+              {t("nextPlace.allVisitedHint", { title: getTripTitle(state.currentTrip, i18n.language) })}
             </Text>
             <Button
               mode="contained-tonal"
@@ -160,11 +161,11 @@ export default function NextPlaceScreen() {
             <Card style={styles.card}>
               <Card.Content>
                 <Text variant="titleLarge" style={[styles.placeName, { color: theme.colors.onSurface }]}>
-                  {state.nextPlace.place.name}
+                  {getPlaceName(state.nextPlace.place, i18n.language)}
                 </Text>
-                {state.nextPlace.place.description ? (
+                {getPlaceDescription(state.nextPlace.place, i18n.language) ? (
                   <Text variant="bodyMedium" style={[styles.description, { color: theme.colors.onSurfaceVariant }]}>
-                    {state.nextPlace.place.description}
+                    {getPlaceDescription(state.nextPlace.place, i18n.language)}
                   </Text>
                 ) : null}
                 {state.nextPlace.place.latitude != null &&

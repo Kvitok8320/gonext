@@ -1,5 +1,6 @@
 {
   "common": {
+    "optional": "Необязательно",
     "cancel": "Отмена",
     "delete": "Удалить",
     "save": "Сохранить",
@@ -40,6 +41,8 @@
     "coordsLabel": "Координаты (Decimal Degrees)",
     "latitudeLabel": "Широта",
     "longitudeLabel": "Долгота",
+    "nameEnLabel": "Название (англ.)",
+    "descriptionEnLabel": "Описание (англ.)",
     "errorName": "Введите название",
     "errorLatitude": "Широта: от -90 до 90",
     "errorLongitude": "Долгота: от -180 до 180"
@@ -60,8 +63,11 @@
     "visited": "Посещено",
     "nameLabel": "Название *",
     "descriptionLabel": "Описание",
+    "datesLabel": "Даты",
     "startDateLabel": "Дата начала",
     "endDateLabel": "Дата окончания",
+    "titleEnLabel": "Название (англ.)",
+    "descriptionEnLabel": "Описание (англ.)",
     "errorName": "Введите название",
     "errorDates": "Дата начала не может быть позже даты окончания",
     "allPlacesAdded": "Все места уже добавлены или список мест пуст",
