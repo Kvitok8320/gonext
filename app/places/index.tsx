@@ -25,7 +25,7 @@ export default function PlacesScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [places, setPlaces] = useState<Place[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);

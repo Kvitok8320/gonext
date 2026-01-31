@@ -36,7 +36,7 @@ export default function PlaceDetailScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [place, setPlace] = useState<Place | null>(null);
   const [loading, setLoading] = useState(true);
 
