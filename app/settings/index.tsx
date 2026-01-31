@@ -8,10 +8,11 @@ import {
   Button,
   Divider,
   List,
+  Switch,
 } from "react-native-paper";
 import { resetAllData } from "../../db";
 import { ScreenWithBackground } from "../../components/ScreenWithBackground";
-import { useThemeMode, type ThemeMode } from "../../hooks/useThemeMode";
+import { useThemeMode } from "../../hooks/useThemeMode";
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -87,21 +88,20 @@ export default function SettingsScreen() {
         <List.Section>
           <List.Subheader>Внешний вид</List.Subheader>
           <List.Item
-            title="Тема"
-            description={themeMode === "light" ? "Светлая" : "Тёмная"}
+            title="Тёмная тема"
+            description={themeMode === "dark" ? "Включена" : "Выключена"}
             left={(props) => (
               <List.Icon
                 {...props}
                 icon={themeMode === "light" ? "white-balance-sunny" : "weather-night"}
               />
             )}
-            right={(props) => (
-              <List.Icon {...props} icon="chevron-right" />
+            right={() => (
+              <Switch
+                value={themeMode === "dark"}
+                onValueChange={(value) => setThemeMode(value ? "dark" : "light")}
+              />
             )}
-            onPress={() => {
-              const next: ThemeMode = themeMode === "light" ? "dark" : "light";
-              setThemeMode(next);
-            }}
           />
         </List.Section>
 

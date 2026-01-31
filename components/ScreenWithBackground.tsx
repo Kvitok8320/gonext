@@ -21,6 +21,7 @@ export function ScreenWithBackground({ children }: ScreenWithBackgroundProps) {
         style={styles.background}
         resizeMode="cover"
       >
+        <View style={styles.overlay} />
         {children}
       </ImageBackground>
     </View>
@@ -30,4 +31,8 @@ export function ScreenWithBackground({ children }: ScreenWithBackgroundProps) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   background: { flex: 1, width: "100%" },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(255, 255, 255, 0.75)",
+  },
 });
