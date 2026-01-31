@@ -1,3 +1,6 @@
+import "../i18n";
+import { Suspense } from "react";
+import { ActivityIndicator, View } from "react-native";
 import { SQLiteProvider } from "expo-sqlite";
 import { Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
@@ -26,12 +29,22 @@ function AppContent() {
   );
 }
 
+function LoadingFallback() {
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
+}
+
 export default function RootLayout() {
   return (
-    <ThemeProvider>
-      <PrimaryColorProvider>
-        <AppContent />
-      </PrimaryColorProvider>
-    </ThemeProvider>
+    <Suspense fallback={<LoadingFallback />}>
+      <ThemeProvider>
+        <PrimaryColorProvider>
+          <AppContent />
+        </PrimaryColorProvider>
+      </ThemeProvider>
+    </Suspense>
   );
 }

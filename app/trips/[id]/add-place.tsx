@@ -1,5 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FlatList, StyleSheet, View } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import {
@@ -19,6 +20,7 @@ export default function AddPlaceToTripScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
+  const { t } = useTranslation();
   const [places, setPlaces] = useState<Place[]>([]);
   const [tripPlaceIds, setTripPlaceIds] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,11 +69,11 @@ export default function AddPlaceToTripScreen() {
       <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Добавить место" />
+        <Appbar.Content title={t("trips.addPlaceToTrip")} />
       </Appbar.Header>
 
       <Searchbar
-        placeholder="Поиск мест..."
+        placeholder={t("trips.searchPlaces")}
         onChangeText={setSearchQuery}
         value={searchQuery}
         style={styles.searchBar}
@@ -79,14 +81,14 @@ export default function AddPlaceToTripScreen() {
 
       {loading ? (
         <View style={styles.center}>
-          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Загрузка...</Text>
+          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{t("common.loading")}</Text>
         </View>
       ) : availablePlaces.length === 0 ? (
         <View style={styles.center}>
           <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>
             {searchQuery.trim()
-              ? "Ничего не найдено"
-              : "Все места уже добавлены или список мест пуст"}
+              ? t("places.nothingFound")
+              : t("trips.allPlacesAdded")}
           </Text>
         </View>
       ) : (
@@ -96,7 +98,7 @@ export default function AddPlaceToTripScreen() {
           renderItem={({ item }) => (
             <List.Item
               title={item.name}
-              description={item.description || "Без описания"}
+              description={item.description || t("places.noDescription")}
               right={(props) => (
                 <List.Icon {...props} icon="plus" />
               )}

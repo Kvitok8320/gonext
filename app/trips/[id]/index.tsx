@@ -1,5 +1,6 @@
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   ScrollView,
@@ -39,6 +40,7 @@ export default function TripDetailScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
+  const { t, i18n } = useTranslation();
   const [trip, setTrip] = useState<Trip | null>(null);
   const [places, setPlaces] = useState<TripPlaceWithPlace[]>([]);
   const [loading, setLoading] = useState(true);
@@ -93,10 +95,10 @@ export default function TripDetailScreen() {
   };
 
   const handleDeletePlace = (tp: TripPlaceWithPlace) => {
-    Alert.alert("Удалить место из маршрута?", tp.place.name, [
-      { text: "Отмена", style: "cancel" },
+    Alert.alert(t("alerts.deletePlaceFromRoute"), tp.place.name, [
+      { text: t("common.cancel"), style: "cancel" },
       {
-        text: "Удалить",
+        text: t("common.delete"),
         style: "destructive",
         onPress: async () => {
           await deleteTripPlace(db, tp.id);
@@ -107,10 +109,10 @@ export default function TripDetailScreen() {
   };
 
   const handleDeleteTrip = () => {
-    Alert.alert("Удалить поездку?", trip?.title ?? "", [
-      { text: "Отмена", style: "cancel" },
+    Alert.alert(t("alerts.deleteTrip"), trip?.title ?? "", [
+      { text: t("common.cancel"), style: "cancel" },
       {
-        text: "Удалить",
+        text: t("common.delete"),
         style: "destructive",
         onPress: async () => {
           if (!trip) return;
@@ -136,11 +138,11 @@ export default function TripDetailScreen() {
         <View style={styles.container}>
           <Appbar.Header>
             <Appbar.BackAction onPress={() => router.back()} />
-            <Appbar.Content title="Поездка" />
+            <Appbar.Content title={t("trips.trip")} />
           </Appbar.Header>
           <View style={styles.center}>
             <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>
-              {loading ? "Загрузка..." : "Не найдено"}
+              {loading ? t("common.loading") : t("common.notFound")}
             </Text>
           </View>
         </View>
@@ -197,13 +199,13 @@ export default function TripDetailScreen() {
         <View style={styles.sectionHeader}>
           <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>Маршрут</Text>
           <Text variant="bodySmall" style={[styles.progress, { color: theme.colors.onSurfaceVariant }]}>
-            {visitedCount} / {places.length} посещено
+            {t("trips.visitedCount", { count: visitedCount, total: places.length })}
           </Text>
         </View>
 
         {places.length === 0 ? (
           <Text variant="bodyMedium" style={[styles.empty, { color: theme.colors.onSurfaceVariant }]}>
-            Нет мест в маршруте. Добавьте первое!
+            {t("trips.noPlacesInRoute")}
           </Text>
         ) : (
           places.map((tp, index) => (
@@ -212,7 +214,7 @@ export default function TripDetailScreen() {
                 title={tp.place.name}
                 description={
                   tp.visited && tp.visitDate
-                    ? `Посещено: ${formatDate(tp.visitDate)}`
+                    ? `${t("trips.visited")}: ${formatDate(tp.visitDate)}`
                     : tp.place.description || undefined
                 }
                 left={() => (
@@ -261,7 +263,7 @@ export default function TripDetailScreen() {
           onPress={() => router.push(`/trips/${trip.id}/add-place`)}
           style={styles.addPlaceBtn}
         >
-          Добавить место
+          {t("trips.addPlace")}
         </Button>
       </ScrollView>
       </View>

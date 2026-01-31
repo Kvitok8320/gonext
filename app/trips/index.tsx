@@ -1,5 +1,6 @@
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FlatList, StyleSheet, View } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { useRouter } from "expo-router";
@@ -20,6 +21,7 @@ export default function TripsScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
+  const { t, i18n } = useTranslation();
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -39,24 +41,25 @@ export default function TripsScreen() {
     }, [loadTrips])
   );
 
+  const locale = i18n.language === "ru" ? "ru-RU" : "en-US";
   const formatDate = (d: string | null) =>
-    d ? new Date(d).toLocaleDateString("ru-RU", { day: "numeric", month: "short", year: "numeric" }) : "—";
+    d ? new Date(d).toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" }) : "—";
 
   return (
     <ScreenWithBackground>
       <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Поездки" />
+        <Appbar.Content title={t("trips.title")} />
       </Appbar.Header>
 
       {loading ? (
         <View style={styles.center}>
-          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Загрузка...</Text>
+          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{t("common.loading")}</Text>
         </View>
       ) : trips.length === 0 ? (
         <View style={styles.center}>
-          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Нет поездок. Создайте первую!</Text>
+          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{t("trips.noTrips")}</Text>
         </View>
       ) : (
         <FlatList
@@ -76,7 +79,7 @@ export default function TripsScreen() {
                   <Text variant="titleMedium">{item.title}</Text>
                   {item.current && (
                     <Chip compact icon="map-marker" style={styles.currentChip}>
-                      Текущая
+                      {t("trips.current")}
                     </Chip>
                   )}
                 </View>
@@ -98,7 +101,7 @@ export default function TripsScreen() {
         icon="plus"
         style={styles.fab}
         onPress={() => router.push("/trips/add")}
-        label="Создать поездку"
+        label={t("trips.addTrip")}
       />
       </View>
     </ScreenWithBackground>

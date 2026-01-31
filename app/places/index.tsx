@@ -1,5 +1,6 @@
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FlatList,
   StyleSheet,
@@ -23,6 +24,7 @@ export default function PlacesScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
+  const { t } = useTranslation();
   const [places, setPlaces] = useState<Place[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -56,11 +58,11 @@ export default function PlacesScreen() {
       <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Места" />
+        <Appbar.Content title={t("places.title")} />
       </Appbar.Header>
 
       <Searchbar
-        placeholder="Поиск мест..."
+        placeholder={t("places.search")}
         onChangeText={setSearchQuery}
         value={searchQuery}
         style={styles.searchBar}
@@ -68,12 +70,12 @@ export default function PlacesScreen() {
 
       {loading ? (
         <View style={styles.center}>
-          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Загрузка...</Text>
+          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{t("common.loading")}</Text>
         </View>
       ) : filteredPlaces.length === 0 ? (
         <View style={styles.center}>
           <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>
-            {searchQuery.trim() ? "Ничего не найдено" : "Нет мест. Добавьте первое!"}
+            {searchQuery.trim() ? t("places.nothingFound") : t("places.noPlaces")}
           </Text>
         </View>
       ) : (
@@ -83,7 +85,7 @@ export default function PlacesScreen() {
           renderItem={({ item }) => (
             <List.Item
               title={item.name}
-              description={item.description || "Без описания"}
+              description={item.description || t("places.noDescription")}
               left={(props) => (
                 <List.Icon {...props} icon={item.liked ? "heart" : "map-marker"} />
               )}
@@ -97,7 +99,7 @@ export default function PlacesScreen() {
         icon="plus"
         style={styles.fab}
         onPress={() => router.push("/places/add")}
-        label="Добавить"
+        label={t("places.add")}
       />
       </View>
     </ScreenWithBackground>

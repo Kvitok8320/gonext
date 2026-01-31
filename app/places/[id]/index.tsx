@@ -1,5 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   Image,
@@ -34,6 +35,7 @@ export default function PlaceDetailScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
+  const { t } = useTranslation();
   const [place, setPlace] = useState<Place | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -56,7 +58,7 @@ export default function PlaceDetailScreen() {
     if (!place) return;
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert("Ошибка", "Нужен доступ к фото");
+      Alert.alert(t("alerts.error"), t("alerts.photoAccessError"));
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -77,7 +79,7 @@ export default function PlaceDetailScreen() {
       await updatePlace(db, place.id, { photos: newPhotos });
       setPlace({ ...place, photos: newPhotos });
     } catch (err) {
-      Alert.alert("Ошибка", "Не удалось сохранить фото");
+      Alert.alert(t("alerts.error"), t("alerts.photoSaveError"));
     }
   };
 
@@ -89,10 +91,10 @@ export default function PlaceDetailScreen() {
   };
 
   const handleDeletePlace = () => {
-    Alert.alert("Удалить место?", place?.name ?? "", [
-      { text: "Отмена", style: "cancel" },
+    Alert.alert(t("alerts.deletePlace"), place?.name ?? "", [
+      { text: t("common.cancel"), style: "cancel" },
       {
-        text: "Удалить",
+        text: t("common.delete"),
         style: "destructive",
         onPress: async () => {
           if (!place) return;
@@ -108,10 +110,10 @@ export default function PlaceDetailScreen() {
       <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
         <Appbar.Header>
           <Appbar.BackAction onPress={() => router.back()} />
-          <Appbar.Content title="Место" />
+          <Appbar.Content title={t("places.place")} />
         </Appbar.Header>
         <View style={styles.center}>
-          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{loading ? "Загрузка..." : "Не найдено"}</Text>
+          <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{loading ? t("common.loading") : t("common.notFound")}</Text>
         </View>
       </View>
     );
@@ -145,10 +147,10 @@ export default function PlaceDetailScreen() {
               </Text>
             )}
             <Text variant="bodyMedium" style={[styles.infoRow, { color: theme.colors.onSurface }]}>
-              В планах: {place.visitlater ? "да" : "нет"}
+              {t("places.inPlans")}: {place.visitlater ? t("common.yes") : t("common.no")}
             </Text>
             <Text variant="bodyMedium" style={[styles.infoRow, { color: theme.colors.onSurface }]}>
-              Понравилось: {place.liked ? "да" : "нет"}
+              {t("places.liked")}: {place.liked ? t("common.yes") : t("common.no")}
             </Text>
           </Card.Content>
         </Card>
@@ -160,12 +162,12 @@ export default function PlaceDetailScreen() {
             onPress={() => openOnMap(place)}
             style={styles.mapButton}
           >
-            Открыть на карте
+            {t("places.openOnMap")}
           </Button>
         )}
 
         <Text variant="titleMedium" style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>
-          Фотографии
+          {t("places.photos")}
         </Text>
         <Button
           mode="outlined"
@@ -173,7 +175,7 @@ export default function PlaceDetailScreen() {
           onPress={handleAddPhoto}
           style={styles.addPhotoButton}
         >
-          Добавить фото
+          {t("places.addPhoto")}
         </Button>
 
         {place.photos.map((path, index) => (
@@ -186,14 +188,14 @@ export default function PlaceDetailScreen() {
               buttonColor={theme.colors.error}
               style={styles.deletePhotoButton}
             >
-              Удалить фото
+              {t("places.deletePhoto")}
             </Button>
           </View>
         ))}
 
         {!hasCoords && (
           <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
-            Добавьте координаты при редактировании, чтобы открыть место на карте.
+            {t("places.addCoordsHint")}
           </Text>
         )}
       </ScrollView>

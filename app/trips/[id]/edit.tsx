@@ -1,5 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -24,6 +25,7 @@ export default function EditTripScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
+  const { t } = useTranslation();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -64,13 +66,13 @@ export default function EditTripScreen() {
   const handleSave = async () => {
     if (!id) return;
     if (!title.trim()) {
-      setError("Введите название");
+      setError(t("trips.errorName"));
       return;
     }
     const sd = parseDate(startDate);
     const ed = parseDate(endDate);
     if (sd && ed && sd > ed) {
-      setError("Дата начала не может быть позже даты окончания");
+      setError(t("trips.errorDates"));
       return;
     }
     setError("");
@@ -95,10 +97,10 @@ export default function EditTripScreen() {
         <View style={styles.container}>
           <Appbar.Header>
             <Appbar.BackAction onPress={() => router.back()} />
-            <Appbar.Content title="Редактирование" />
+            <Appbar.Content title={t("edit.title")} />
           </Appbar.Header>
           <View style={styles.center}>
-            <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Загрузка...</Text>
+            <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{t("common.loading")}</Text>
           </View>
         </View>
       </ScreenWithBackground>
@@ -119,14 +121,14 @@ export default function EditTripScreen() {
       >
         <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
           <TextInput
-            label="Название *"
+            label={t("trips.nameLabel")}
             value={title}
             onChangeText={setTitle}
             mode="outlined"
             style={styles.input}
           />
           <TextInput
-            label="Описание"
+            label={t("trips.descriptionLabel")}
             value={description}
             onChangeText={setDescription}
             mode="outlined"
@@ -138,7 +140,7 @@ export default function EditTripScreen() {
             Даты
           </Text>
           <TextInput
-            label="Дата начала"
+            label={t("trips.startDateLabel")}
             value={startDate}
             onChangeText={setStartDate}
             mode="outlined"
@@ -146,7 +148,7 @@ export default function EditTripScreen() {
             style={styles.input}
           />
           <TextInput
-            label="Дата окончания"
+            label={t("trips.endDateLabel")}
             value={endDate}
             onChangeText={setEndDate}
             mode="outlined"
@@ -155,7 +157,7 @@ export default function EditTripScreen() {
           />
           <View style={styles.row}>
             <Checkbox.Item
-              label="Текущая поездка"
+              label={t("trips.currentTrip")}
               status={current ? "checked" : "unchecked"}
               onPress={() => setCurrent(!current)}
             />
@@ -172,7 +174,7 @@ export default function EditTripScreen() {
             disabled={saving}
             style={styles.button}
           >
-            Сохранить
+            {t("common.save")}
           </Button>
         </ScrollView>
       </KeyboardAvoidingView>

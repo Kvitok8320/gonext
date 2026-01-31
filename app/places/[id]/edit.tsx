@@ -1,5 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -24,6 +25,7 @@ export default function EditPlaceScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
+  const { t } = useTranslation();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [visitlater, setVisitlater] = useState(true);
@@ -62,15 +64,15 @@ export default function EditPlaceScreen() {
   const handleSave = async () => {
     if (!id) return;
     if (!name.trim()) {
-      setError("Введите название");
+      setError(t("places.errorName"));
       return;
     }
     if (lat != null && (isNaN(lat) || lat < -90 || lat > 90)) {
-      setError("Широта: от -90 до 90");
+      setError(t("places.errorLatitude"));
       return;
     }
     if (lon != null && (isNaN(lon) || lon < -180 || lon > 180)) {
-      setError("Долгота: от -180 до 180");
+      setError(t("places.errorLongitude"));
       return;
     }
     setError("");
@@ -96,10 +98,10 @@ export default function EditPlaceScreen() {
         <View style={styles.container}>
           <Appbar.Header>
             <Appbar.BackAction onPress={() => router.back()} />
-            <Appbar.Content title="Редактирование" />
+            <Appbar.Content title={t("edit.title")} />
           </Appbar.Header>
           <View style={styles.center}>
-            <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Загрузка...</Text>
+            <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{t("common.loading")}</Text>
           </View>
         </View>
       </ScreenWithBackground>
@@ -111,7 +113,7 @@ export default function EditPlaceScreen() {
       <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Редактировать место" />
+        <Appbar.Content title={t("places.editPlace")} />
       </Appbar.Header>
 
       <KeyboardAvoidingView
@@ -120,14 +122,14 @@ export default function EditPlaceScreen() {
       >
         <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
           <TextInput
-            label="Название *"
+            label={t("places.nameLabel")}
             value={name}
             onChangeText={setName}
             mode="outlined"
             style={styles.input}
           />
           <TextInput
-            label="Описание"
+            label={t("places.descriptionLabel")}
             value={description}
             onChangeText={setDescription}
             mode="outlined"
@@ -137,24 +139,24 @@ export default function EditPlaceScreen() {
           />
           <View style={styles.row}>
             <Checkbox.Item
-              label="Хочу посетить"
+              label={t("places.wantToVisit")}
               status={visitlater ? "checked" : "unchecked"}
               onPress={() => setVisitlater(!visitlater)}
             />
           </View>
           <View style={styles.row}>
             <Checkbox.Item
-              label="Понравилось"
+              label={t("places.liked")}
               status={liked ? "checked" : "unchecked"}
               onPress={() => setLiked(!liked)}
             />
           </View>
           <Text variant="labelMedium" style={styles.label}>
-            Координаты (Decimal Degrees)
+            {t("places.coordsLabel")}
           </Text>
           <View style={styles.coordsRow}>
             <TextInput
-              label="Широта"
+              label={t("places.latitudeLabel")}
               value={latitude}
               onChangeText={setLatitude}
               mode="outlined"
@@ -163,7 +165,7 @@ export default function EditPlaceScreen() {
               style={styles.coordInput}
             />
             <TextInput
-              label="Долгота"
+              label={t("places.longitudeLabel")}
               value={longitude}
               onChangeText={setLongitude}
               mode="outlined"
@@ -184,7 +186,7 @@ export default function EditPlaceScreen() {
             disabled={saving}
             style={styles.button}
           >
-            Сохранить
+            {t("common.save")}
           </Button>
         </ScrollView>
       </KeyboardAvoidingView>

@@ -11,8 +11,10 @@ import {
   Switch,
   useTheme,
 } from "react-native-paper";
+import { useTranslation } from "react-i18next";
 import { resetAllData } from "../../db";
 import { ScreenWithBackground } from "../../components/ScreenWithBackground";
+import { LANGUAGES } from "../../i18n";
 import { usePrimaryColor } from "../../hooks/usePrimaryColor";
 import { useThemeMode } from "../../hooks/useThemeMode";
 import { PRIMARY_COLOR_PRESETS } from "../../theme/primaryColors";
@@ -20,6 +22,7 @@ import { PRIMARY_COLOR_PRESETS } from "../../theme/primaryColors";
 export default function SettingsScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
+  const { t, i18n } = useTranslation();
   const { themeMode, setThemeMode } = useThemeMode();
   const { primaryColor, setPrimaryColor } = usePrimaryColor();
   const theme = useTheme();
@@ -30,20 +33,20 @@ export default function SettingsScreen() {
 
   const handleResetData = () => {
     Alert.alert(
-      "Сброс данных",
-      "Удалить все места, поездки и фотографии? Это действие нельзя отменить.",
+      t("settings.resetConfirm"),
+      t("settings.resetMessage"),
       [
-        { text: "Отмена", style: "cancel" },
+        { text: t("common.cancel"), style: "cancel" },
         {
-          text: "Продолжить",
+          text: t("settings.continue"),
           onPress: () => {
             Alert.alert(
-              "Подтверждение",
-              "Вы уверены? Все данные будут удалены безвозвратно.",
+              t("settings.resetConfirmTitle"),
+              t("settings.resetConfirmMessage"),
               [
-                { text: "Отмена", style: "cancel" },
+                { text: t("common.cancel"), style: "cancel" },
                 {
-                  text: "Да, удалить всё",
+                  text: t("settings.resetConfirmButton"),
                   style: "destructive",
                   onPress: async () => {
                     setResetting(true);
@@ -51,7 +54,7 @@ export default function SettingsScreen() {
                       await resetAllData(db);
                       router.replace("/");
                     } catch {
-                      Alert.alert("Ошибка", "Не удалось сбросить данные");
+                      Alert.alert(t("alerts.error"), t("settings.resetError"));
                     } finally {
                       setResetting(false);
                     }
@@ -70,20 +73,20 @@ export default function SettingsScreen() {
       <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Настройки" />
+        <Appbar.Content title={t("settings.title")} />
       </Appbar.Header>
 
       <ScrollView style={styles.scroll}>
         <List.Section>
-          <List.Subheader>О приложении</List.Subheader>
+          <List.Subheader>{t("settings.about")}</List.Subheader>
           <List.Item
-            title="GoNext — Дневник туриста"
-            description={`Версия ${appVersion}`}
+            title={t("settings.appName")}
+            description={t("settings.version", { version: appVersion })}
             left={(props) => <List.Icon {...props} icon="information" />}
           />
           <List.Item
-            title="Данные хранятся только на устройстве"
-            description="Приложение работает офлайн"
+            title={t("settings.offlineNote")}
+            description={t("settings.offlineDesc")}
             left={(props) => <List.Icon {...props} icon="cellphone" />}
           />
         </List.Section>
@@ -91,10 +94,28 @@ export default function SettingsScreen() {
         <Divider />
 
         <List.Section>
-          <List.Subheader>Внешний вид</List.Subheader>
+          <List.Subheader>{t("settings.appearance")}</List.Subheader>
           <List.Item
-            title="Цвет темы"
-            description="Выберите основной цвет приложения"
+            title={t("settings.language")}
+            description={LANGUAGES.find((l) => l.code === i18n.language)?.label ?? i18n.language}
+            left={(props) => <List.Icon {...props} icon="translate" />}
+          />
+          <View style={styles.langPicker}>
+            {LANGUAGES.map(({ code, label }) => (
+              <Button
+                key={code}
+                mode={i18n.language === code ? "contained" : "outlined"}
+                compact
+                onPress={() => i18n.changeLanguage(code)}
+                style={styles.langButton}
+              >
+                {label}
+              </Button>
+            ))}
+          </View>
+          <List.Item
+            title={t("settings.themeColor")}
+            description={t("settings.themeColorDesc")}
             left={(props) => <List.Icon {...props} icon="palette" />}
           />
           <View style={styles.colorPicker}>
@@ -115,8 +136,8 @@ export default function SettingsScreen() {
             ))}
           </View>
           <List.Item
-            title="Тёмная тема"
-            description={themeMode === "dark" ? "Включена" : "Выключена"}
+            title={t("settings.darkTheme")}
+            description={themeMode === "dark" ? t("settings.darkThemeOn") : t("settings.darkThemeOff")}
             left={(props) => (
               <List.Icon
                 {...props}
@@ -135,7 +156,7 @@ export default function SettingsScreen() {
         <Divider />
 
         <List.Section>
-          <List.Subheader>Данные</List.Subheader>
+          <List.Subheader>{t("settings.data")}</List.Subheader>
         </List.Section>
         <Button
           mode="contained-tonal"
@@ -145,7 +166,7 @@ export default function SettingsScreen() {
           style={styles.resetButton}
           textColor={theme.colors.error}
         >
-          Сбросить все данные
+          {t("settings.resetData")}
         </Button>
       </ScrollView>
       </View>
@@ -158,6 +179,13 @@ const CIRCLE_SIZE = 36;
 const styles = StyleSheet.create({
   container: { flex: 1 },
   scroll: { flex: 1 },
+  langPicker: {
+    flexDirection: "row",
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+  },
+  langButton: { minWidth: 80 },
   colorPicker: {
     flexDirection: "row",
     flexWrap: "wrap",

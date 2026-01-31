@@ -1,5 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   Image,
@@ -37,6 +38,7 @@ export default function TripPlaceDetailScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
+  const { t, i18n } = useTranslation();
   const [tripPlace, setTripPlace] = useState<TripPlaceWithPlace | null>(null);
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(true);
@@ -73,7 +75,7 @@ export default function TripPlaceDetailScreen() {
     if (!tripPlace) return;
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert("Ошибка", "Нужен доступ к фото");
+      Alert.alert(t("alerts.error"), t("alerts.photoAccessError"));
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -94,7 +96,7 @@ export default function TripPlaceDetailScreen() {
       await updateTripPlace(db, tripPlace.id, { photos: newPhotos });
       setTripPlace({ ...tripPlace, photos: newPhotos });
     } catch (err) {
-      Alert.alert("Ошибка", "Не удалось сохранить фото");
+      Alert.alert(t("alerts.error"), t("alerts.photoSaveError"));
     }
   };
 
@@ -111,11 +113,11 @@ export default function TripPlaceDetailScreen() {
         <View style={styles.container}>
           <Appbar.Header>
             <Appbar.BackAction onPress={() => router.back()} />
-            <Appbar.Content title="Место" />
+            <Appbar.Content title={t("places.place")} />
           </Appbar.Header>
           <View style={styles.center}>
             <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>
-              {loading ? "Загрузка..." : "Не найдено"}
+              {loading ? t("common.loading") : t("common.notFound")}
             </Text>
           </View>
         </View>
@@ -125,9 +127,10 @@ export default function TripPlaceDetailScreen() {
 
   const { place } = tripPlace;
   const hasCoords = place.latitude != null && place.longitude != null;
+  const locale = i18n.language === "ru" ? "ru-RU" : "en-US";
   const formatDate = (d: string | null) =>
     d
-      ? new Date(d).toLocaleDateString("ru-RU", {
+      ? new Date(d).toLocaleDateString(locale, {
           day: "numeric",
           month: "short",
           year: "numeric",
@@ -152,14 +155,14 @@ export default function TripPlaceDetailScreen() {
             ) : null}
             {tripPlace.visited && tripPlace.visitDate && (
               <Text variant="labelSmall" style={[styles.visitDate, { color: theme.colors.onSurfaceVariant }]}>
-                Посещено: {formatDate(tripPlace.visitDate)}
+                {t("trips.visited")}: {formatDate(tripPlace.visitDate)}
               </Text>
             )}
           </Card.Content>
         </Card>
 
         <Text variant="titleSmall" style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>
-          Заметки
+          {t("placeInTrip.notes")}
         </Text>
         <TextInput
           value={notes}
@@ -173,7 +176,7 @@ export default function TripPlaceDetailScreen() {
         />
 
         <Text variant="titleSmall" style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>
-          Фотографии
+          {t("placeInTrip.photos")}
         </Text>
         <View style={styles.photosRow}>
           {tripPlace.photos.map((path, index) => (
@@ -193,7 +196,7 @@ export default function TripPlaceDetailScreen() {
               size={32}
               onPress={handleAddPhoto}
             />
-            <Text variant="labelSmall">Добавить</Text>
+            <Text variant="labelSmall">{t("placeInTrip.add")}</Text>
           </View>
         </View>
 
@@ -206,7 +209,7 @@ export default function TripPlaceDetailScreen() {
             }
             style={styles.mapButton}
           >
-            Открыть на карте
+            {t("places.openOnMap")}
           </Button>
         )}
       </ScrollView>

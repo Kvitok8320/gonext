@@ -1,5 +1,6 @@
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Linking, Platform, ScrollView, StyleSheet, View } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import {
@@ -31,6 +32,7 @@ export default function NextPlaceScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const [loading, setLoading] = useState(true);
   const [state, setState] = useState<{
@@ -71,10 +73,10 @@ export default function NextPlaceScreen() {
         <View style={styles.container}>
           <Appbar.Header>
             <Appbar.BackAction onPress={() => router.back()} />
-            <Appbar.Content title="Следующее место" />
+            <Appbar.Content title={t("nextPlace.title")} />
           </Appbar.Header>
           <View style={styles.center}>
-            <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>Загрузка...</Text>
+            <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{t("common.loading")}</Text>
           </View>
         </View>
       </ScreenWithBackground>
@@ -99,10 +101,10 @@ export default function NextPlaceScreen() {
         {noCurrentTrip && (
           <View style={styles.center}>
             <Text variant="bodyLarge" style={[styles.message, { color: theme.colors.onSurface }]}>
-              Нет текущей поездки
+              {t("nextPlace.noCurrentTrip")}
             </Text>
             <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
-              Создайте поездку или выберите текущую в разделе «Поездки»
+              {t("nextPlace.noCurrentTripHint")}
             </Text>
             <Button
               mode="contained"
@@ -110,7 +112,7 @@ export default function NextPlaceScreen() {
               onPress={() => router.push("/trips")}
               style={styles.actionButton}
             >
-              Перейти к поездкам
+              {t("nextPlace.goToTrips")}
             </Button>
           </View>
         )}
@@ -118,10 +120,10 @@ export default function NextPlaceScreen() {
         {noPlacesInRoute && state?.currentTrip && (
           <View style={styles.center}>
             <Text variant="bodyLarge" style={[styles.message, { color: theme.colors.onSurface }]}>
-              Нет мест в маршруте
+              {t("nextPlace.noPlacesInRoute")}
             </Text>
             <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
-              Добавьте места в поездку «{state.currentTrip.title}»
+              {t("nextPlace.noPlacesHint", { title: state.currentTrip.title })}
             </Text>
             <Button
               mode="contained"
@@ -129,7 +131,7 @@ export default function NextPlaceScreen() {
               onPress={() => router.push(`/trips/${state.currentTrip!.id}`)}
               style={styles.actionButton}
             >
-              Добавить места
+              {t("nextPlace.addPlaces")}
             </Button>
           </View>
         )}
@@ -148,7 +150,7 @@ export default function NextPlaceScreen() {
               onPress={() => router.push(`/trips/${state.currentTrip!.id}`)}
               style={styles.actionButton}
             >
-              Открыть поездку
+              {t("nextPlace.openTrip")}
             </Button>
           </View>
         )}
@@ -189,7 +191,7 @@ export default function NextPlaceScreen() {
                   }
                   style={styles.button}
                 >
-                  Открыть на карте
+                  {t("nextPlace.openOnMap")}
                 </Button>
                 <Button
                   mode="contained-tonal"
@@ -202,12 +204,12 @@ export default function NextPlaceScreen() {
                   }
                   style={styles.button}
                 >
-                  Открыть в навигаторе
+                  {t("nextPlace.openInNavigator")}
                 </Button>
               </View>
             ) : (
               <Text variant="bodySmall" style={[styles.noCoords, { color: theme.colors.onSurfaceVariant }]}>
-                Добавьте координаты места, чтобы открыть на карте
+                {t("nextPlace.addCoordsHint")}
               </Text>
             )}
           </>

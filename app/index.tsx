@@ -1,4 +1,5 @@
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import { Appbar, Button, Surface, Text, useTheme } from "react-native-paper";
 import { ScreenWithBackground } from "../components/ScreenWithBackground";
@@ -6,44 +7,45 @@ import { ScreenWithBackground } from "../components/ScreenWithBackground";
 export default function HomeScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const { t } = useTranslation();
 
   return (
     <ScreenWithBackground>
       <Appbar.Header>
-        <Appbar.Content title="GoNext" />
+        <Appbar.Content title={t("home.title")} />
       </Appbar.Header>
 
       <Surface style={styles.content} elevation={0}>
         <Text variant="titleMedium" style={[styles.subtitle, { color: theme.colors.onSurface }]}>
-          Дневник туриста
+          {t("home.subtitle")}
         </Text>
         <Button
           mode="contained"
           style={styles.button}
           onPress={() => router.push("/places")}
         >
-          Места
+          {t("home.places")}
         </Button>
         <Button
           mode="contained"
           style={styles.button}
           onPress={() => router.push("/trips")}
         >
-          Поездки
+          {t("home.trips")}
         </Button>
         <Button
           mode="contained"
           style={styles.button}
           onPress={() => router.push("/next-place")}
         >
-          Следующее место
+          {t("home.nextPlace")}
         </Button>
         <Button
           mode="contained"
           style={styles.button}
           onPress={() => router.push("/settings")}
         >
-          Настройки
+          {t("home.settings")}
         </Button>
       </Surface>
     </ScreenWithBackground>

@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -23,6 +24,7 @@ export default function AddTripScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const theme = useTheme();
+  const { t } = useTranslation();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -40,13 +42,13 @@ export default function AddTripScreen() {
 
   const handleSave = async () => {
     if (!title.trim()) {
-      setError("Введите название");
+      setError(t("trips.errorName"));
       return;
     }
     const sd = parseDate(startDate);
     const ed = parseDate(endDate);
     if (sd && ed && sd > ed) {
-      setError("Дата начала не может быть позже даты окончания");
+      setError(t("trips.errorDates"));
       return;
     }
     setError("");
@@ -79,7 +81,7 @@ export default function AddTripScreen() {
       >
         <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
           <TextInput
-            label="Название *"
+            label={t("trips.nameLabel")}
             value={title}
             onChangeText={setTitle}
             mode="outlined"
@@ -98,7 +100,7 @@ export default function AddTripScreen() {
             Даты
           </Text>
           <TextInput
-            label="Дата начала"
+            label={t("trips.startDateLabel")}
             value={startDate}
             onChangeText={setStartDate}
             mode="outlined"
@@ -115,7 +117,7 @@ export default function AddTripScreen() {
           />
           <View style={styles.row}>
             <Checkbox.Item
-              label="Текущая поездка"
+              label={t("trips.currentTrip")}
               status={current ? "checked" : "unchecked"}
               onPress={() => setCurrent(!current)}
             />
@@ -132,7 +134,7 @@ export default function AddTripScreen() {
             disabled={saving}
             style={styles.button}
           >
-            Создать
+            {t("common.create")}
           </Button>
         </ScrollView>
       </KeyboardAvoidingView>
