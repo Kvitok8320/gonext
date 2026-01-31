@@ -105,7 +105,7 @@ export default function PlaceDetailScreen() {
 
   if (loading || !place) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
         <Appbar.Header>
           <Appbar.BackAction onPress={() => router.back()} />
           <Appbar.Content title="Место" />
@@ -120,7 +120,7 @@ export default function PlaceDetailScreen() {
   const hasCoords = place.latitude != null && place.longitude != null;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title={place.name} />

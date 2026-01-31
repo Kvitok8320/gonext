@@ -1,12 +1,13 @@
 import { SQLiteProvider } from "expo-sqlite";
 import { Stack } from "expo-router";
-import { MD3DarkTheme, MD3LightTheme, PaperProvider } from "react-native-paper";
+import { PaperProvider } from "react-native-paper";
 import { migrateDbIfNeeded } from "../db/init";
 import { ThemeProvider, useThemeMode } from "../hooks/useThemeMode";
+import { AppDarkTheme, AppLightTheme } from "../theme/colors";
 
 function AppContent() {
   const { themeMode } = useThemeMode();
-  const paperTheme = themeMode === "dark" ? MD3DarkTheme : MD3LightTheme;
+  const paperTheme = themeMode === "dark" ? AppDarkTheme : AppLightTheme;
 
   return (
     <PaperProvider theme={paperTheme}>

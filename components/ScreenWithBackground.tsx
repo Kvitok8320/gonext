@@ -1,4 +1,5 @@
 import { ImageBackground, StyleSheet, View } from "react-native";
+import { useTheme } from "react-native-paper";
 import { useThemeMode } from "../hooks/useThemeMode";
 
 const bgImage = require("../assets/backgrounds/gonext-bg.png");
@@ -9,9 +10,19 @@ type ScreenWithBackgroundProps = {
 
 export function ScreenWithBackground({ children }: ScreenWithBackgroundProps) {
   const { themeMode } = useThemeMode();
+  const theme = useTheme();
 
   if (themeMode === "dark") {
-    return <View style={styles.container}>{children}</View>;
+    return (
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
+        {children}
+      </View>
+    );
   }
 
   return (
