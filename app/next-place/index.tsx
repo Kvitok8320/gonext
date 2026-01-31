@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   Text,
+  useTheme,
 } from "react-native-paper";
 import { getCurrentTrip } from "../../db/trips";
 import { getTripPlacesWithPlaceByTripId } from "../../db/tripPlaces";
@@ -29,6 +30,7 @@ function openInNavigator(lat: number, lon: number) {
 export default function NextPlaceScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
+  const theme = useTheme();
   const [loading, setLoading] = useState(true);
   const [state, setState] = useState<{
     currentTrip: { id: string; title: string } | null;
@@ -98,7 +100,7 @@ export default function NextPlaceScreen() {
             <Text variant="bodyLarge" style={styles.message}>
               Нет текущей поездки
             </Text>
-            <Text variant="bodySmall" style={styles.hint}>
+            <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
               Создайте поездку или выберите текущую в разделе «Поездки»
             </Text>
             <Button
@@ -117,7 +119,7 @@ export default function NextPlaceScreen() {
             <Text variant="bodyLarge" style={styles.message}>
               Нет мест в маршруте
             </Text>
-            <Text variant="bodySmall" style={styles.hint}>
+            <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
               Добавьте места в поездку «{state.currentTrip.title}»
             </Text>
             <Button
@@ -136,7 +138,7 @@ export default function NextPlaceScreen() {
             <Text variant="bodyLarge" style={styles.message}>
               Все места посещены!
             </Text>
-            <Text variant="bodySmall" style={styles.hint}>
+            <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
               Отличная поездка в «{state.currentTrip.title}»
             </Text>
             <Button
@@ -158,13 +160,13 @@ export default function NextPlaceScreen() {
                   {state.nextPlace.place.name}
                 </Text>
                 {state.nextPlace.place.description ? (
-                  <Text variant="bodyMedium" style={styles.description}>
+                  <Text variant="bodyMedium" style={[styles.description, { color: theme.colors.onSurfaceVariant }]}>
                     {state.nextPlace.place.description}
                   </Text>
                 ) : null}
                 {state.nextPlace.place.latitude != null &&
                   state.nextPlace.place.longitude != null && (
-                    <Text variant="labelSmall" style={styles.coords}>
+                    <Text variant="labelSmall" style={[styles.coords, { color: theme.colors.onSurfaceVariant }]}>
                       {state.nextPlace.place.latitude.toFixed(6)},{" "}
                       {state.nextPlace.place.longitude.toFixed(6)}
                     </Text>
@@ -203,7 +205,7 @@ export default function NextPlaceScreen() {
                 </Button>
               </View>
             ) : (
-              <Text variant="bodySmall" style={styles.noCoords}>
+              <Text variant="bodySmall" style={[styles.noCoords, { color: theme.colors.onSurfaceVariant }]}>
                 Добавьте координаты места, чтобы открыть на карте
               </Text>
             )}
@@ -226,13 +228,13 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   message: { textAlign: "center", marginBottom: 8 },
-  hint: { textAlign: "center", color: "#666", marginBottom: 16 },
+  hint: { textAlign: "center", marginBottom: 16 },
   actionButton: { marginTop: 8 },
   card: { marginBottom: 24 },
   placeName: { marginBottom: 8 },
-  description: { color: "#555", marginBottom: 8 },
-  coords: { color: "#888" },
+  description: { marginBottom: 8 },
+  coords: {},
   buttons: { gap: 12 },
   button: { marginBottom: 12 },
-  noCoords: { color: "#666", fontStyle: "italic" },
+  noCoords: { fontStyle: "italic" },
 });

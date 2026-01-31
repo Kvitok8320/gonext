@@ -9,6 +9,7 @@ import {
   Divider,
   List,
   Switch,
+  useTheme,
 } from "react-native-paper";
 import { resetAllData } from "../../db";
 import { ScreenWithBackground } from "../../components/ScreenWithBackground";
@@ -18,6 +19,7 @@ export default function SettingsScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const { themeMode, setThemeMode } = useThemeMode();
+  const theme = useTheme();
   const [resetting, setResetting] = useState(false);
 
   const appVersion =
@@ -116,7 +118,7 @@ export default function SettingsScreen() {
           onPress={handleResetData}
           disabled={resetting}
           style={styles.resetButton}
-          textColor="#C62828"
+          textColor={theme.colors.error}
         >
           Сбросить все данные
         </Button>

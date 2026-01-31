@@ -10,6 +10,7 @@ import {
   FAB,
   List,
   Text,
+  useTheme,
 } from "react-native-paper";
 import { getAllTrips } from "../../db/trips";
 import type { Trip } from "../../types";
@@ -18,6 +19,7 @@ import { ScreenWithBackground } from "../../components/ScreenWithBackground";
 export default function TripsScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
+  const theme = useTheme();
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -63,7 +65,10 @@ export default function TripsScreen() {
           contentContainerStyle={styles.list}
           renderItem={({ item }) => (
             <Card
-              style={[styles.card, item.current && styles.cardCurrent]}
+              style={[
+                styles.card,
+                item.current && { ...styles.cardCurrent, borderColor: theme.colors.primary },
+              ]}
               onPress={() => router.push(`/trips/${item.id}`)}
             >
               <Card.Content>
@@ -76,11 +81,11 @@ export default function TripsScreen() {
                   )}
                 </View>
                 {item.description ? (
-                  <Text variant="bodySmall" numberOfLines={2} style={styles.desc}>
+                  <Text variant="bodySmall" numberOfLines={2} style={[styles.desc, { color: theme.colors.onSurfaceVariant }]}>
                     {item.description}
                   </Text>
                 ) : null}
-                <Text variant="labelSmall" style={styles.dates}>
+                <Text variant="labelSmall" style={[styles.dates, { color: theme.colors.onSurfaceVariant }]}>
                   {formatDate(item.startDate)} — {formatDate(item.endDate)}
                 </Text>
               </Card.Content>
@@ -105,10 +110,10 @@ const styles = StyleSheet.create({
   center: { flex: 1, justifyContent: "center", alignItems: "center", padding: 24 },
   list: { padding: 16, paddingBottom: 80 },
   card: { marginBottom: 12 },
-  cardCurrent: { borderWidth: 2, borderColor: "#6200ee" },
+  cardCurrent: { borderWidth: 2 },
   cardHeader: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 },
   currentChip: { alignSelf: "flex-start" },
-  desc: { color: "#666", marginTop: 4 },
-  dates: { marginTop: 8, color: "#999" },
+  desc: { marginTop: 4 },
+  dates: { marginTop: 8 },
   fab: { position: "absolute", right: 16, bottom: 54 },
 });

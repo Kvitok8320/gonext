@@ -17,6 +17,7 @@ import {
   IconButton,
   Text,
   TextInput,
+  useTheme,
 } from "react-native-paper";
 import { getTripPlaceById, updateTripPlace } from "../../../../db/tripPlaces";
 import { ensureTripPlacePhotoDir, saveImageFromPicker } from "../../../../utils/photos";
@@ -35,6 +36,7 @@ export default function TripPlaceDetailScreen() {
   }>();
   const router = useRouter();
   const db = useSQLiteContext();
+  const theme = useTheme();
   const [tripPlace, setTripPlace] = useState<TripPlaceWithPlace | null>(null);
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(true);
@@ -144,12 +146,12 @@ export default function TripPlaceDetailScreen() {
         <Card style={styles.card}>
           <Card.Content>
             {place.description ? (
-              <Text variant="bodyMedium" style={styles.desc}>
+              <Text variant="bodyMedium" style={[styles.desc, { color: theme.colors.onSurfaceVariant }]}>
                 {place.description}
               </Text>
             ) : null}
             {tripPlace.visited && tripPlace.visitDate && (
-              <Text variant="labelSmall" style={styles.visitDate}>
+              <Text variant="labelSmall" style={[styles.visitDate, { color: theme.colors.onSurfaceVariant }]}>
                 Посещено: {formatDate(tripPlace.visitDate)}
               </Text>
             )}
@@ -225,7 +227,7 @@ const styles = StyleSheet.create({
   content: { padding: 16, paddingBottom: 32 },
   card: { marginBottom: 16 },
   desc: { marginBottom: 4 },
-  visitDate: { color: "#666" },
+  visitDate: {},
   sectionTitle: { marginBottom: 8 },
   notesInput: { marginBottom: 16 },
   photosRow: { flexDirection: "row", flexWrap: "wrap", gap: 8 },

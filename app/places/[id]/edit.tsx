@@ -14,6 +14,7 @@ import {
   Checkbox,
   TextInput,
   Text,
+  useTheme,
 } from "react-native-paper";
 import { getPlaceById, updatePlace } from "../../../db/places";
 import { ScreenWithBackground } from "../../../components/ScreenWithBackground";
@@ -22,6 +23,7 @@ export default function EditPlaceScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const db = useSQLiteContext();
+  const theme = useTheme();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [visitlater, setVisitlater] = useState(true);
@@ -171,7 +173,7 @@ export default function EditPlaceScreen() {
             />
           </View>
           {error ? (
-            <Text variant="bodySmall" style={styles.error}>
+            <Text variant="bodySmall" style={[styles.error, { color: theme.colors.error }]}>
               {error}
             </Text>
           ) : null}
@@ -202,6 +204,6 @@ const styles = StyleSheet.create({
   label: { marginTop: 8, marginBottom: 4 },
   coordsRow: { flexDirection: "row", gap: 12 },
   coordInput: { flex: 1, marginBottom: 12 },
-  error: { color: "red", marginBottom: 8 },
+  error: { marginBottom: 8 },
   button: { marginTop: 16 },
 });

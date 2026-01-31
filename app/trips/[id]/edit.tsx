@@ -14,6 +14,7 @@ import {
   Checkbox,
   TextInput,
   Text,
+  useTheme,
 } from "react-native-paper";
 import { getTripById, updateTrip } from "../../../db/trips";
 import { ScreenWithBackground } from "../../../components/ScreenWithBackground";
@@ -22,6 +23,7 @@ export default function EditTripScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const db = useSQLiteContext();
+  const theme = useTheme();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -159,7 +161,7 @@ export default function EditTripScreen() {
             />
           </View>
           {error ? (
-            <Text variant="bodySmall" style={styles.error}>
+            <Text variant="bodySmall" style={[styles.error, { color: theme.colors.error }]}>
               {error}
             </Text>
           ) : null}
@@ -188,6 +190,6 @@ const styles = StyleSheet.create({
   input: { marginBottom: 12 },
   row: { marginBottom: 0 },
   label: { marginTop: 8, marginBottom: 4 },
-  error: { color: "red", marginBottom: 8 },
+  error: { marginBottom: 8 },
   button: { marginTop: 16 },
 });

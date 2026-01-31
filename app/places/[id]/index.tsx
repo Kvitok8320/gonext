@@ -15,6 +15,7 @@ import {
   Button,
   Card,
   Text,
+  useTheme,
 } from "react-native-paper";
 import { getPlaceById, updatePlace, deletePlace } from "../../../db/places";
 import { ensurePlacePhotoDir, saveImageFromPicker } from "../../../utils/photos";
@@ -32,6 +33,7 @@ export default function PlaceDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const db = useSQLiteContext();
+  const theme = useTheme();
   const [place, setPlace] = useState<Place | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -133,19 +135,19 @@ export default function PlaceDetailScreen() {
               {place.name}
             </Text>
             {place.description ? (
-              <Text variant="bodyMedium" style={styles.infoRow}>
+              <Text variant="bodyMedium" style={[styles.infoRow, { color: theme.colors.onSurface }]}>
                 {place.description}
               </Text>
             ) : null}
             {hasCoords && (
-              <Text variant="bodyMedium" style={styles.infoRow}>
+              <Text variant="bodyMedium" style={[styles.infoRow, { color: theme.colors.onSurface }]}>
                 DD: {place.latitude?.toFixed(6)}, {place.longitude?.toFixed(6)}
               </Text>
             )}
-            <Text variant="bodyMedium" style={styles.infoRow}>
+            <Text variant="bodyMedium" style={[styles.infoRow, { color: theme.colors.onSurface }]}>
               В планах: {place.visitlater ? "да" : "нет"}
             </Text>
-            <Text variant="bodyMedium" style={styles.infoRow}>
+            <Text variant="bodyMedium" style={[styles.infoRow, { color: theme.colors.onSurface }]}>
               Понравилось: {place.liked ? "да" : "нет"}
             </Text>
           </Card.Content>
@@ -181,7 +183,7 @@ export default function PlaceDetailScreen() {
               mode="contained"
               icon="delete"
               onPress={() => handleDeletePhoto(index)}
-              buttonColor="#E65100"
+              buttonColor={theme.colors.error}
               style={styles.deletePhotoButton}
             >
               Удалить фото
@@ -190,7 +192,7 @@ export default function PlaceDetailScreen() {
         ))}
 
         {!hasCoords && (
-          <Text variant="bodySmall" style={styles.hint}>
+          <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
             Добавьте координаты при редактировании, чтобы открыть место на карте.
           </Text>
         )}
@@ -207,7 +209,7 @@ const styles = StyleSheet.create({
   infoCard: { marginBottom: 16 },
   infoContent: { gap: 4 },
   placeName: { marginBottom: 8 },
-  infoRow: { marginBottom: 4, color: "#333" },
+  infoRow: { marginBottom: 4 },
   mapButton: { marginBottom: 24 },
   sectionTitle: { marginBottom: 12 },
   addPhotoButton: { marginBottom: 16 },
@@ -219,5 +221,5 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   deletePhotoButton: {},
-  hint: { color: "#666", fontStyle: "italic" },
+  hint: { fontStyle: "italic" },
 });

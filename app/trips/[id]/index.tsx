@@ -16,6 +16,7 @@ import {
   IconButton,
   List,
   Text,
+  useTheme,
 } from "react-native-paper";
 import {
   getTripById,
@@ -37,6 +38,7 @@ export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const db = useSQLiteContext();
+  const theme = useTheme();
   const [trip, setTrip] = useState<Trip | null>(null);
   const [places, setPlaces] = useState<TripPlaceWithPlace[]>([]);
   const [loading, setLoading] = useState(true);
@@ -165,11 +167,11 @@ export default function TripDetailScreen() {
         <Card style={styles.card}>
           <Card.Content>
             {trip.description ? (
-              <Text variant="bodyMedium" style={styles.desc}>
+              <Text variant="bodyMedium" style={[styles.desc, { color: theme.colors.onSurfaceVariant }]}>
                 {trip.description}
               </Text>
             ) : null}
-            <Text variant="labelSmall" style={styles.dates}>
+            <Text variant="labelSmall" style={[styles.dates, { color: theme.colors.onSurfaceVariant }]}>
               {formatDate(trip.startDate)} — {formatDate(trip.endDate)}
             </Text>
             <View style={styles.chips}>
@@ -194,13 +196,13 @@ export default function TripDetailScreen() {
 
         <View style={styles.sectionHeader}>
           <Text variant="titleMedium">Маршрут</Text>
-          <Text variant="bodySmall" style={styles.progress}>
+          <Text variant="bodySmall" style={[styles.progress, { color: theme.colors.onSurfaceVariant }]}>
             {visitedCount} / {places.length} посещено
           </Text>
         </View>
 
         {places.length === 0 ? (
-          <Text variant="bodyMedium" style={styles.empty}>
+          <Text variant="bodyMedium" style={[styles.empty, { color: theme.colors.onSurfaceVariant }]}>
             Нет мест в маршруте. Добавьте первое!
           </Text>
         ) : (
@@ -279,7 +281,7 @@ const styles = StyleSheet.create({
   content: { padding: 16, paddingBottom: 32 },
   card: { marginBottom: 16 },
   desc: { marginBottom: 8 },
-  dates: { color: "#666", marginBottom: 8 },
+  dates: { marginBottom: 8 },
   chips: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   setCurrentBtn: { alignSelf: "flex-start" },
   sectionHeader: {
@@ -288,8 +290,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 12,
   },
-  progress: { color: "#666" },
-  empty: { color: "#666", marginBottom: 16, fontStyle: "italic" },
+  progress: {},
+  empty: { marginBottom: 16, fontStyle: "italic" },
   placeCard: { marginBottom: 8 },
   listLeft: { flexDirection: "row", alignItems: "center" },
   order: { minWidth: 24, textAlign: "center" },
