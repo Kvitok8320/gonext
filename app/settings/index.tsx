@@ -11,10 +11,12 @@ import {
 } from "react-native-paper";
 import { resetAllData } from "../../db";
 import { ScreenWithBackground } from "../../components/ScreenWithBackground";
+import { useThemeMode, type ThemeMode } from "../../hooks/useThemeMode";
 
 export default function SettingsScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
+  const { themeMode, setThemeMode } = useThemeMode();
   const [resetting, setResetting] = useState(false);
 
   const appVersion =
@@ -77,6 +79,29 @@ export default function SettingsScreen() {
             title="Данные хранятся только на устройстве"
             description="Приложение работает офлайн"
             left={(props) => <List.Icon {...props} icon="cellphone" />}
+          />
+        </List.Section>
+
+        <Divider />
+
+        <List.Section>
+          <List.Subheader>Внешний вид</List.Subheader>
+          <List.Item
+            title="Тема"
+            description={themeMode === "light" ? "Светлая" : "Тёмная"}
+            left={(props) => (
+              <List.Icon
+                {...props}
+                icon={themeMode === "light" ? "white-balance-sunny" : "weather-night"}
+              />
+            )}
+            right={(props) => (
+              <List.Icon {...props} icon="chevron-right" />
+            )}
+            onPress={() => {
+              const next: ThemeMode = themeMode === "light" ? "dark" : "light";
+              setThemeMode(next);
+            }}
           />
         </List.Section>
 
